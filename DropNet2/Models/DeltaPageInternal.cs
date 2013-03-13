@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DropNet2.Models
 {
-    public class DeltaPageInternal
+    internal class DeltaPageInternal
     {
         public string Cursor { get; set; }
         public bool Has_More { get; set; }

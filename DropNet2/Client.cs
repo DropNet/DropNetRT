@@ -34,6 +34,8 @@ namespace DropNet2
         private OAuthMessageHandler _oauthHandler;
         private HttpClient _httpClient;
 
+        private const string _lineBreak = "\r\n";
+
         /// <summary>
         /// Gets the directory root for the requests (full or sandbox mode)
         /// </summary>
@@ -92,25 +94,6 @@ namespace DropNet2
             }
             _httpClient = new HttpClient(_oauthHandler);
         }
-
-        public void SetUserToken(string userToken, string userSecret)
-        {
-            SetUserToken(new UserLogin { Token = userToken, Secret = userSecret });
-        }
-
-        public void SetUserToken(UserLogin userLogin)
-        {
-            UserLogin = userLogin;
-
-            _oauthHandler.UserToken = userLogin.Token;
-            _oauthHandler.UserSecret = userLogin.Secret;
-        }
-
-        private string MakeRequestString(string action, ApiType apiType)
-        {
-            //TODO - check for /
-            return string.Format("{0}/{1}", apiType == ApiType.Base ? ApiBaseUrl : ApiContentBaseUrl, action);
-        }
     
         enum ApiType
         {
@@ -118,46 +101,19 @@ namespace DropNet2
             Content
         }
 
-        public string BuildAuthorizeUrl(UserLogin userLogin, string callback = null)
-        {
-            if (userLogin == null)
-            {
-                throw new ArgumentNullException("userLogin");
-            }
 
-            //Go 1-Liner!
-            return string.Format("https://www.dropbox.com/1/oauth/authorize?oauth_token={0}{1}", userLogin.Token,
-                (string.IsNullOrEmpty(callback) ? string.Empty : "&oauth_callback=" + callback));
-        }
-
-        private UserLogin GetUserLoginFromParams(string urlParams)
-        {
-            var userLogin = new UserLogin();
-
-            //TODO - Make this not suck
-            var parameters = urlParams.Split('&');
-
-            foreach (var parameter in parameters)
-            {
-                if (parameter.Split('=')[0] == "oauth_token_secret")
-                {
-                    userLogin.Secret = parameter.Split('=')[1];
-                }
-                else if (parameter.Split('=')[0] == "oauth_token")
-                {
-                    userLogin.Token = parameter.Split('=')[1];
-                }
-            }
-
-            return userLogin;
-        }
-
-        public async Task<T> SendAsync<T>(HttpRequest request) where T : class
+        private async Task<T> SendAsync<T>(HttpRequest request) where T : class
         {
             //Authenticate with oauth
             _oauthHandler.Authenticate(request);
 
             var response = await _httpClient.SendAsync(request);
+
+            //TODO - Error Handling
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                throw new UnauthorizedAccessException();
+            }
 
             string responseBody = await response.Content.ReadAsStringAsync();
 

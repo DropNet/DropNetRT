@@ -12,6 +12,10 @@ namespace DropNet2
     public partial class DropNetClient
     {
 
+        /// <summary>
+        /// Auth Step 1. Gets a Request Token which is required for the login request
+        /// </summary>
+        /// <returns></returns>
         public async Task<UserLogin> GetRequestToken()
         {
             var requestUrl = MakeRequestString("1/oauth/request_token", ApiType.Base);
@@ -31,6 +35,10 @@ namespace DropNet2
             return UserLogin;
         }
 
+        /// <summary>
+        /// Auth Step 3. Once a Request Token has been authorized convert it to an access token for API usage.
+        /// </summary>
+        /// <returns></returns>
         public async Task<UserLogin> GetAccessToken()
         {
             var requestUrl = MakeRequestString("1/oauth/access_token", ApiType.Base);
@@ -51,6 +59,10 @@ namespace DropNet2
         }
 
 
+        /// <summary>
+        /// Gets the account info of the current logged in user
+        /// </summary>
+        /// <returns></returns>
         public async Task<AccountInfo> AccountInfo()
         {
             var requestUrl = MakeRequestString("1/account/info", ApiType.Base);
