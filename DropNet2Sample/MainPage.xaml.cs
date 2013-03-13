@@ -8,15 +8,69 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using DropNet2Sample.Resources;
+using DropNet2Sample.Extensions;
+using DropNet2Sample.ViewModels;
 
 namespace DropNet2Sample
 {
     public partial class MainPage : PhoneApplicationPage
     {
+        private const string _tokenCallbackUrl = "http://example.com";
+
+        private LoginViewModel _model;
+
         // Constructor
         public MainPage()
         {
             InitializeComponent();
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            //Show the splash screen
+            MessageBox.Show("Welcome to the DropNet Sample App. Something about it being open source...");
+
+            _model = new LoginViewModel(this.GetProgressIndicator(), Dispatcher);
+            this.DataContext = _model;            
+        }
+
+        private async void btnLogin_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            _model.SetStatus("Loading...", true);
+            _model.ShowBrowser = true;
+
+            //Get the request token
+            var requestToken = await App.DropNetClient.GetRequestToken();
+
+            var tokenUrl = App.DropNetClient.BuildAuthorizeUrl(requestToken, _tokenCallbackUrl);
+            //Open a browser with the URL
+            loginBrowser.LoadCompleted += new System.Windows.Navigation.LoadCompletedEventHandler(loginBrowser_LoadCompleted);
+            loginBrowser.Navigate(new Uri(tokenUrl));
+        }
+
+        private async void loginBrowser_LoadCompleted(object sender, NavigationEventArgs e)
+        {
+            //check for the call back url here
+            if (e.Uri.Host == "example.com")
+            {
+                //SUCCESS!
+                _model.SetStatus("Getting Access Token...", true);
+                var accessToken = await App.DropNetClient.GetAccessToken();
+
+                //TODO - Save this token/Secret for remember me function
+
+                //Set the user Token/Secret in the current instance of DropNetClient
+                App.DropNetClient.SetUserToken(accessToken);
+
+                _model.SetStatus("Login successful", false, 5000);
+            }
+            else
+            {
+                //Loaded the login page
+                _model.ClearStatus();
+            }
         }
 
     }

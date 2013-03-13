@@ -12,6 +12,10 @@ namespace DropNet2Sample
 {
     public partial class App : Application
     {
+        public static DropNet2.DropNetClient DropNetClient;
+
+
+
         /// <summary>
         /// Provides easy access to the root frame of the Phone Application.
         /// </summary>
@@ -55,6 +59,7 @@ namespace DropNet2Sample
                 PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
             }
 
+            DropNetClient = new DropNet2.DropNetClient("9m6v782a7aeop0w", "dbd11uqce6hr8zg");
         }
 
         // Code to execute when the application is launching (eg, from Start)
