@@ -65,6 +65,8 @@ namespace DropNet2Sample
                 App.DropNetClient.SetUserToken(accessToken);
 
                 _model.SetStatus("Login successful", false, 5000);
+
+                NavigationService.Navigate(new Uri("/ContentsPage.xaml", UriKind.RelativeOrAbsolute));
             }
             else
             {
