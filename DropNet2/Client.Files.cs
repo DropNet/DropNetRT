@@ -124,9 +124,10 @@ namespace DropNet2
         /// <returns></returns>
         public async Task<MetaData> Upload(string path, string filename, byte[] fileData)
         {
-            var requestUrl = MakeRequestString(string.Format("1/files/{0}{1}", Root, path), ApiType.Base);
+            var requestUrl = MakeRequestString(string.Format("1/files/{0}{1}", Root, path), ApiType.Content);
 
-            var request = new HttpRequest(HttpMethod.Get, requestUrl);
+            var request = new HttpRequest(HttpMethod.Post, requestUrl);
+            request.AddParameter("file", filename);
 
             //build up the form data
             var requestStream = new MemoryStream();
@@ -159,9 +160,11 @@ namespace DropNet2
         /// <returns></returns>
         public async Task<MetaData> Upload(string path, string filename, Stream fileStream)
         {
-            var requestUrl = MakeRequestString(string.Format("1/files/{0}{1}", Root, path), ApiType.Base);
+            //TODO - merge with above function
+            var requestUrl = MakeRequestString(string.Format("1/files/{0}{1}", Root, path), ApiType.Content);
 
-            var request = new HttpRequest(HttpMethod.Get, requestUrl);
+            var request = new HttpRequest(HttpMethod.Post, requestUrl);
+            request.AddParameter("file", filename);
 
             //build up the form data
             var requestStream = new MemoryStream();

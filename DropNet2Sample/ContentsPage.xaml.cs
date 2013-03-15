@@ -31,7 +31,7 @@ namespace DropNet2Sample
                 var rawBytes = new byte[str.Length * sizeof(char)];
                 System.Buffer.BlockCopy(str.ToCharArray(), 0, rawBytes, 0, rawBytes.Length);
 
-                var uploadResponse = await App.DropNetClient.Upload("/Test/1", "BLAH.png", rawBytes);
+                var uploadResponse = await App.DropNetClient.Upload("/Test/1", "BLAH.txt", rawBytes);
             }
             catch (DropboxException ex)
             {

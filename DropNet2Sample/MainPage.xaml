@@ -60,7 +60,7 @@
         		<Grid.Background>
         			<SolidColorBrush Color="{StaticResource PhoneBackgroundColor}"/>
         		</Grid.Background>
-        		<phone:WebBrowser x:Name="loginBrowser"/>
+        		<phone:WebBrowser x:Name="loginBrowser" IsScriptEnabled="True"/>
         	</Grid>
 
         </Grid>
