@@ -79,10 +79,7 @@ namespace DropNet2
             //Default to full access
             UseSandbox = false;
 
-            _httpHandler = new HttpClientHandler
-            {
-                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
-            };
+            _httpHandler = new HttpClientHandler();
 
             if (UserLogin != null)
             {

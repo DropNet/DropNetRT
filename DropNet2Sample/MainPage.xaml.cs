@@ -46,7 +46,7 @@ namespace DropNet2Sample
 
             var tokenUrl = App.DropNetClient.BuildAuthorizeUrl(requestToken, _tokenCallbackUrl);
             //Open a browser with the URL
-            loginBrowser.LoadCompleted += new System.Windows.Navigation.LoadCompletedEventHandler(loginBrowser_LoadCompleted);
+            loginBrowser.LoadCompleted += loginBrowser_LoadCompleted;
             loginBrowser.Navigate(new Uri(tokenUrl));
         }
 

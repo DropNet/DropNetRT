@@ -1,10 +1,12 @@
 ﻿using DropNet2.Models;
+using Microsoft.Phone.Shell;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 
 namespace DropNet2Sample.ViewModels
 {
@@ -42,5 +44,11 @@ namespace DropNet2Sample.ViewModels
                 NotifyPropertyChanged("SelectedMeta");
             }
         }
+
+        public ContentsViewModel(ProgressIndicator prog, Dispatcher dispatcher)
+            : base(prog, dispatcher)
+        {
+        }
+
     }
 }
