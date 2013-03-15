@@ -1,4 +1,5 @@
-﻿using DropNet2.HttpHelpers;
+﻿using DropNet2.Helpers;
+using DropNet2.HttpHelpers;
 using DropNet2.Models;
 using Newtonsoft.Json;
 using System;
@@ -93,6 +94,26 @@ namespace DropNet2
             return await response.Content.ReadAsByteArrayAsync();
         }
 
+        /// <summary>
+        /// Gets a file from the given path
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public async Task<string> GetFileString(string path)
+        {
+            var requestUrl = MakeRequestString(string.Format("1/files/{0}{1}", Root, path), ApiType.Content);
+
+            var request = new HttpRequest(HttpMethod.Get, requestUrl);
+
+            _oauthHandler.Authenticate(request);
+
+            var response = await _httpClient.SendAsync(request);
+
+            //TODO - Error Handling
+
+            return await response.Content.ReadAsStringAsync();
+        }
+
 
         /// <summary>
         /// Uploads a file to a Dropbox folder
@@ -116,6 +137,41 @@ namespace DropNet2
 
             // Write the file data directly to the Stream, rather than serializing it to a string.
             requestStream.Write(fileData, 0, fileData.Length);
+
+            // End the file
+            var footerBytes = Encoding.UTF8.GetBytes(_lineBreak);
+            requestStream.Write(footerBytes, 0, footerBytes.Length);
+
+            request.Content = new StreamContent(requestStream);
+
+            var response = await SendAsync<MetaData>(request);
+
+            return response;
+        }
+
+
+        /// <summary>
+        /// Uploads a file to a Dropbox folder
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="filename"></param>
+        /// <param name="fileStream"></param>
+        /// <returns></returns>
+        public async Task<MetaData> Upload(string path, string filename, Stream fileStream)
+        {
+            var requestUrl = MakeRequestString(string.Format("1/files/{0}{1}", Root, path), ApiType.Base);
+
+            var request = new HttpRequest(HttpMethod.Get, requestUrl);
+
+            //build up the form data
+            var requestStream = new MemoryStream();
+
+            // Add just the first part of this parameter, since we will write the file data directly to the Stream
+            var headerBytes = Encoding.UTF8.GetBytes(GetMultipartFileHeader(filename));
+            requestStream.Write(headerBytes, 0, headerBytes.Length);
+
+            // Write the file data directly to the Stream
+            StreamUtils.CopyStream(fileStream, requestStream);
 
             // End the file
             var footerBytes = Encoding.UTF8.GetBytes(_lineBreak);

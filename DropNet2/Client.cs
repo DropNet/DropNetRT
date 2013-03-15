@@ -1,4 +1,5 @@
 ﻿using DropNet2.Authentication;
+using DropNet2.Exceptions;
 using DropNet2.HttpHelpers;
 using DropNet2.Models;
 using Newtonsoft.Json;
@@ -104,12 +105,20 @@ namespace DropNet2
             //Authenticate with oauth
             _oauthHandler.Authenticate(request);
 
-            var response = await _httpClient.SendAsync(request);
-
-            //TODO - Error Handling
-            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            HttpResponseMessage response;
+            try
             {
-                throw new UnauthorizedAccessException();
+                response = await _httpClient.SendAsync(request);
+            }
+            catch (Exception ex)
+            {
+                throw new DropboxException(ex);
+            }
+
+            //TODO - More Error Handling
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                throw new DropboxException(response);
             }
 
             string responseBody = await response.Content.ReadAsStringAsync();
