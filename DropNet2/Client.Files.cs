@@ -1,4 +1,5 @@
-﻿using DropNet2.Helpers;
+﻿using DropNet2.Exceptions;
+using DropNet2.Helpers;
 using DropNet2.HttpHelpers;
 using DropNet2.Models;
 using Newtonsoft.Json;
@@ -6,7 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -127,27 +130,44 @@ namespace DropNet2
             var requestUrl = MakeRequestString(string.Format("1/files/{0}{1}", Root, path), ApiType.Content);
 
             var request = new HttpRequest(HttpMethod.Post, requestUrl);
-            request.AddParameter("file", filename);
 
-            //build up the form data
-            var requestStream = new MemoryStream();
+            _oauthHandler.Authenticate(request);
 
-            // Add just the first part of this parameter, since we will write the file data directly to the Stream
-            var headerBytes = Encoding.UTF8.GetBytes(GetMultipartFileHeader(filename));
-            requestStream.Write(headerBytes, 0, headerBytes.Length);
+            var content = new MultipartFormDataContent(FormBoundary);
 
-            // Write the file data directly to the Stream, rather than serializing it to a string.
-            requestStream.Write(fileData, 0, fileData.Length);
+            foreach (var parm in request.Parameters)
+            {
+                content.Add(new StringContent(parm.Value.ToString()), parm.Name);
+            }
 
-            // End the file
-            var footerBytes = Encoding.UTF8.GetBytes(_lineBreak);
-            requestStream.Write(footerBytes, 0, footerBytes.Length);
+            var fileContent = new ByteArrayContent(fileData);
+            fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("file")
+            {
+                FileName = filename,
+                Name = "file"
+            };
+            fileContent.Headers.Add("Content-Type", "application/octet-stream");
+            content.Add(fileContent);
 
-            request.Content = new StreamContent(requestStream);
+            HttpResponseMessage response;
+            try
+            {
+                response = await _httpClient.PostAsync(requestUrl, content);
+            }
+            catch (Exception ex)
+            {
+                throw new DropboxException(ex);
+            }
 
-            var response = await SendAsync<MetaData>(request);
+            //TODO - More Error Handling
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                throw new DropboxException(response);
+            }
 
-            return response;
+            string responseBody = await response.Content.ReadAsStringAsync();
+
+            return JsonConvert.DeserializeObject<MetaData>(responseBody);
         }
 
 
@@ -160,31 +180,17 @@ namespace DropNet2
         /// <returns></returns>
         public async Task<MetaData> Upload(string path, string filename, Stream fileStream)
         {
-            //TODO - merge with above function
-            var requestUrl = MakeRequestString(string.Format("1/files/{0}{1}", Root, path), ApiType.Content);
+            var rawBytes = ReadFully(fileStream);
+            return await Upload(path, filename, rawBytes);
+        }
 
-            var request = new HttpRequest(HttpMethod.Post, requestUrl);
-            request.AddParameter("file", filename);
-
-            //build up the form data
-            var requestStream = new MemoryStream();
-
-            // Add just the first part of this parameter, since we will write the file data directly to the Stream
-            var headerBytes = Encoding.UTF8.GetBytes(GetMultipartFileHeader(filename));
-            requestStream.Write(headerBytes, 0, headerBytes.Length);
-
-            // Write the file data directly to the Stream
-            StreamUtils.CopyStream(fileStream, requestStream);
-
-            // End the file
-            var footerBytes = Encoding.UTF8.GetBytes(_lineBreak);
-            requestStream.Write(footerBytes, 0, footerBytes.Length);
-
-            request.Content = new StreamContent(requestStream);
-
-            var response = await SendAsync<MetaData>(request);
-
-            return response;
+        private byte[] ReadFully(Stream input)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                input.CopyTo(ms);
+                return ms.ToArray();
+            }
         }
 
 

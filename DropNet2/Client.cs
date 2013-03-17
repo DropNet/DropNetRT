@@ -91,6 +91,11 @@ namespace DropNet2
                 _oauthHandler = new OAuthMessageHandler(_httpHandler, _apiKey, _apisecret);
             }
             _httpClient = new HttpClient(_oauthHandler);
+            _httpClient.DefaultRequestHeaders.Add("User-Agent", "DropNet2");
+            if (_httpClient.DefaultRequestHeaders.Any(h => h.Key == "Connection"))
+            {
+                _httpClient.DefaultRequestHeaders.Remove("Connection");
+            }
         }
     
         enum ApiType
