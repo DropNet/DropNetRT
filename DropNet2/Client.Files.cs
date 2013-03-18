@@ -133,7 +133,7 @@ namespace DropNet2
 
             _oauthHandler.Authenticate(request);
 
-            var content = new MultipartFormDataContent(FormBoundary);
+            var content = new MultipartFormDataContent(_formBoundary);
 
             foreach (var parm in request.Parameters)
             {

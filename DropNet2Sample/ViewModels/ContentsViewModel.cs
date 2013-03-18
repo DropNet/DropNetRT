@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Threading;
+using DropNet2Sample.Extensions;
 
 namespace DropNet2Sample.ViewModels
 {
@@ -50,5 +51,16 @@ namespace DropNet2Sample.ViewModels
         {
         }
 
+
+        internal async void LoadPath(string p)
+        {
+            //get the metadata
+            var metadata = await App.DropNetClient.GetMetaData(p);
+
+            //now load the viewmodel with it
+            MetaData = metadata;
+            Contents = metadata.Contents.ToObservableCollection();
+            SelectedMeta = null;
+        }
     }
 }

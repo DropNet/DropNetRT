@@ -18,6 +18,9 @@ namespace DropNet2
         private const string ApiBaseUrl = "https://api.dropbox.com";
         private const string ApiContentBaseUrl = "https://api-content.dropbox.com";
 
+        /// <summary>
+        /// Do not set this property directly, instead use SetUserToken
+        /// </summary>
         public UserLogin UserLogin { get; set; }
 
         /// <summary>
@@ -36,6 +39,7 @@ namespace DropNet2
         private HttpClient _httpClient;
 
         private const string _lineBreak = "\r\n";
+        private const string _formBoundary = "-----------------------------28947758029299";
 
         /// <summary>
         /// Gets the directory root for the requests (full or sandbox mode)
@@ -75,6 +79,9 @@ namespace DropNet2
             LoadClient();
         }
 
+        /// <summary>
+        /// Internal method to load up the HttpClient stuff
+        /// </summary>
         private void LoadClient()
         {
             //Default to full access
@@ -105,6 +112,12 @@ namespace DropNet2
         }
 
 
+        /// <summary>
+        /// Wrapper around the HttpClient.SendAsync function with error handling
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="request"></param>
+        /// <returns></returns>
         private async Task<T> SendAsync<T>(HttpRequest request) where T : class
         {
             //Authenticate with oauth

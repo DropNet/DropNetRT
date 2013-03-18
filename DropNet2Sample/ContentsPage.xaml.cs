@@ -9,6 +9,7 @@ using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using DropNet2Sample.ViewModels;
 using DropNet2.Exceptions;
+using DropNet2Sample.Extensions;
 
 namespace DropNet2Sample
 {
@@ -21,22 +22,14 @@ namespace DropNet2Sample
             InitializeComponent();
         }
 
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
 
-            try
-            {
-                var str = "ASDFDFSDFSDFSDFFSDF";
-                var rawBytes = new byte[str.Length * sizeof(char)];
-                System.Buffer.BlockCopy(str.ToCharArray(), 0, rawBytes, 0, rawBytes.Length);
+            _model = new ContentsViewModel(this.GetProgressIndicator(), Dispatcher);
+            this.DataContext = _model;
 
-                var uploadResponse = await App.DropNetClient.Upload("/Test/1", "BLAH.txt", rawBytes);
-            }
-            catch (DropboxException ex)
-            {
-
-            }
+            _model.LoadPath("/");
         }
     }
 }

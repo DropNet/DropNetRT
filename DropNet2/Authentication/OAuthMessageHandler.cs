@@ -37,6 +37,11 @@ namespace DropNet2.Authentication
             UserSecret = userSecret;
         }
 
+        /// <summary>
+        /// Builds up the oauth parameters and updated the request Uri
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         public HttpRequest Authenticate(HttpRequest request)
         {
             request.AddParameter("oauth_version", "1.0");

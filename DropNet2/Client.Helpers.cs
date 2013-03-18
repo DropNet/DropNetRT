@@ -12,7 +12,11 @@ namespace DropNet2
 {
     public partial class DropNetClient
     {
-
+        /// <summary>
+        /// Converts the ThumbnailSize enum to the string equivalent for the API
+        /// </summary>
+        /// <param name="size"></param>
+        /// <returns></returns>
         private string ThumbnailSizeString(ThumbnailSize size)
         {
             switch (size)
@@ -29,14 +33,6 @@ namespace DropNet2
                     return "xl";
             }
             return "s";
-        }
-
-
-        private const string FormBoundary = "-----------------------------28947758029299";
-        private static string GetMultipartFileHeader(string fileName)
-        {
-            return string.Format("--{0}{4}Content-Disposition: form-data; name=\"{1}\"; filename=\"{2}\"{4}Content-Type: {3}{4}{4}",
-                FormBoundary, fileName, fileName, "application/octet-stream", _lineBreak);
         }
         
         /// <summary>
@@ -64,6 +60,12 @@ namespace DropNet2
             }
         }
 
+        /// <summary>
+        /// Internal method to build the full request Url
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="apiType"></param>
+        /// <returns></returns>
         private string MakeRequestString(string action, ApiType apiType)
         {
             //TODO - check for /
@@ -89,6 +91,11 @@ namespace DropNet2
                 (string.IsNullOrEmpty(callback) ? string.Empty : "&oauth_callback=" + callback));
         }
 
+        /// <summary>
+        /// Reads the auth response parameters and creates a UserLogin object from it
+        /// </summary>
+        /// <param name="urlParams"></param>
+        /// <returns></returns>
         private UserLogin GetUserLoginFromParams(string urlParams)
         {
             var userLogin = new UserLogin();
@@ -110,6 +117,11 @@ namespace DropNet2
             return userLogin;
         }
 
+        /// <summary>
+        /// Builds a DeltaEntry object from a list of string responses
+        /// </summary>
+        /// <param name="stringList"></param>
+        /// <returns></returns>
         private DeltaEntry StringListToDeltaEntry(List<string> stringList)
         {
             var deltaEntry = new DeltaEntry
