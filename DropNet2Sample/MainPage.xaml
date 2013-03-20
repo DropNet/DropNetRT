@@ -43,18 +43,20 @@
          -->
 
         <!--TitlePanel contains the name of the application and page title-->
-        <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,12,0,635">
-            <TextBlock Text="DROPNET SAMPLE" Style="{StaticResource PhoneTextNormalStyle}" Margin="12,0"/>
-            <TextBlock Text="login" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+        <StackPanel x:Name="TitlePanel" Margin="12,12,0,635" VerticalAlignment="Top">
+            <TextBlock Text="LOGIN" Style="{StaticResource PhoneTextNormalStyle}" Margin="12,0" FontSize="29.333"/>
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
-        <Grid x:Name="ContentPanel" Margin="12,138,12,0">
+        <Grid x:Name="ContentPanel" Margin="12,52,12,0">
         	<Grid Visibility="{Binding ShowButton, Converter={StaticResource BoolToVisConverter}}">
         		<Grid.Background>
         			<SolidColorBrush Color="{StaticResource PhoneBackgroundColor}"/>
         		</Grid.Background>
-        		<Button x:Name="btnLogin" Content="login" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="29.333" Width="456" Click="btnLogin_Click"/>
+        		<StackPanel>
+        			<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Press the button to start the Login process..." VerticalAlignment="Top" Margin="12,0,0,0"/>
+        			<Button x:Name="btnLogin" Content="login" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="29.333" Width="456" Click="btnLogin_Click" Margin="0,0,-356,0"/>
+        		</StackPanel>
         	</Grid>
         	<Grid Visibility="{Binding ShowBrowser, Converter={StaticResource BoolToVisConverter}}">
         		<Grid.Background>

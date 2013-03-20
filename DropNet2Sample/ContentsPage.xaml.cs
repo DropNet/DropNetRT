@@ -10,6 +10,7 @@ using Microsoft.Phone.Shell;
 using DropNet2Sample.ViewModels;
 using DropNet2.Exceptions;
 using DropNet2Sample.Extensions;
+using DropNet2.Models;
 
 namespace DropNet2Sample
 {
@@ -31,5 +32,22 @@ namespace DropNet2Sample
 
             _model.LoadPath("/");
         }
+
+        private void lsbContents_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count > 0)
+            {
+                var selected = (e.AddedItems[0] as MetaData);
+
+                if (selected == null) return;
+
+                if (selected.Is_Dir)
+                {
+                    //navigate to the new dir
+                    _model.LoadPath(selected.Path);
+                }
+            }
+        }
+
     }
 }

@@ -97,26 +97,6 @@ namespace DropNet2
             return await response.Content.ReadAsByteArrayAsync();
         }
 
-        /// <summary>
-        /// Gets a file from the given path
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public async Task<string> GetFileString(string path)
-        {
-            var requestUrl = MakeRequestString(string.Format("1/files/{0}{1}", Root, path), ApiType.Content);
-
-            var request = new HttpRequest(HttpMethod.Get, requestUrl);
-
-            _oauthHandler.Authenticate(request);
-
-            var response = await _httpClient.SendAsync(request);
-
-            //TODO - Error Handling
-
-            return await response.Content.ReadAsStringAsync();
-        }
-
 
         /// <summary>
         /// Uploads a file to a Dropbox folder

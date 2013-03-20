@@ -59,7 +59,8 @@ namespace DropNet2Sample
                 PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
             }
 
-            DropNetClient = new DropNet2.DropNetClient("9m6v782a7aeop0w", "dbd11uqce6hr8zg");
+            DropNetClient = new DropNet2.DropNetClient("y0mm6cm3psurvi7", "zfeijf4xbzdi072");
+            DropNetClient.UseSandbox = true;
         }
 
         // Code to execute when the application is launching (eg, from Start)
