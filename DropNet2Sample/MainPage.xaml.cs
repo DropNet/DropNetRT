@@ -16,7 +16,7 @@ namespace DropNet2Sample
     public partial class MainPage : PhoneApplicationPage
     {
         //TODO - Your callback url here
-        private const string _tokenCallbackUrl = "http://dkdevelopment.net/BoxShotLogin.htm";
+        private const string _tokenCallbackUrl = "http://dkdevelopment.net/";
 
         private LoginViewModel _model;
 
@@ -24,6 +24,8 @@ namespace DropNet2Sample
         public MainPage()
         {
             InitializeComponent();
+
+            loginBrowser.LoadCompleted += loginBrowser_LoadCompleted;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -47,14 +49,13 @@ namespace DropNet2Sample
 
             var tokenUrl = App.DropNetClient.BuildAuthorizeUrl(requestToken, _tokenCallbackUrl);
             //Open a browser with the URL
-            loginBrowser.LoadCompleted += loginBrowser_LoadCompleted;
             loginBrowser.Navigate(new Uri(tokenUrl));
         }
 
         private async void loginBrowser_LoadCompleted(object sender, NavigationEventArgs e)
         {
             //check for the call back url here
-            if (e.Uri.AbsolutePath == "/BoxShotLogin.htm")
+            if (e.Uri.Host == "dkdevelopment.net")
             {
                 //SUCCESS!
                 _model.SetStatus("Getting Access Token...", true);

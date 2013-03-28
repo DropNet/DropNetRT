@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Navigation;
-using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
-using DropNet2Sample.ViewModels;
-using DropNet2.Exceptions;
+﻿using DropNet2.Models;
 using DropNet2Sample.Extensions;
-using DropNet2.Models;
+using DropNet2Sample.ViewModels;
+using Microsoft.Phone.Controls;
+using System.Windows.Navigation;
 
 namespace DropNet2Sample
 {
@@ -33,6 +25,31 @@ namespace DropNet2Sample
             _model.LoadPath("/");
         }
 
+        protected override void OnBackKeyPress(System.ComponentModel.CancelEventArgs e)
+        {
+            if (_model.MetaData.Path == "/")
+            {
+                base.OnBackKeyPress(e);
+            }
+            else
+            {
+                var lastslash = _model.MetaData.Path.LastIndexOf("/");
+                var parentPath = _model.MetaData.Path.Remove(lastslash);
+                //Check if you can go up a directory
+                if (string.IsNullOrEmpty(parentPath))
+                {
+                    //root
+                    _model.LoadPath("/");
+                    e.Cancel = true;
+                }
+                else
+                {
+                    _model.LoadPath(parentPath);
+                    e.Cancel = true;
+                }
+            }
+        }
+
         private void lsbContents_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count > 0)
@@ -45,6 +62,10 @@ namespace DropNet2Sample
                 {
                     //navigate to the new dir
                     _model.LoadPath(selected.Path);
+                }
+                else
+                {
+                    //Do something here for files
                 }
             }
         }

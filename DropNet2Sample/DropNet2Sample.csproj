@@ -156,6 +156,42 @@
     <Content Include="Assets\Tiles\IconicTileSmall.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="icons\dark\folder.png" />
+    <Content Include="icons\dark\folder_app.png" />
+    <Content Include="icons\dark\folder_gray.png" />
+    <Content Include="icons\dark\folder_public.png" />
+    <Content Include="icons\dark\folder_star.png" />
+    <Content Include="icons\dark\folder_user.png" />
+    <Content Include="icons\dark\page_white.png" />
+    <Content Include="icons\dark\page_white_acrobat.png" />
+    <Content Include="icons\dark\page_white_code.png" />
+    <Content Include="icons\dark\page_white_excel.png" />
+    <Content Include="icons\dark\page_white_film.png" />
+    <Content Include="icons\dark\page_white_new.png" />
+    <Content Include="icons\dark\page_white_picture.png" />
+    <Content Include="icons\dark\page_white_powerpoint.png" />
+    <Content Include="icons\dark\page_white_sound.png" />
+    <Content Include="icons\dark\page_white_text.png" />
+    <Content Include="icons\dark\page_white_visualstudio.png" />
+    <Content Include="icons\dark\page_white_word.png" />
+    <Content Include="icons\light\folder.png" />
+    <Content Include="icons\light\folder_app.png" />
+    <Content Include="icons\light\folder_gray.png" />
+    <Content Include="icons\light\folder_public.png" />
+    <Content Include="icons\light\folder_star.png" />
+    <Content Include="icons\light\folder_user.png" />
+    <Content Include="icons\light\page_white.png" />
+    <Content Include="icons\light\page_white_acrobat.png" />
+    <Content Include="icons\light\page_white_code.png" />
+    <Content Include="icons\light\page_white_excel.png" />
+    <Content Include="icons\light\page_white_film.png" />
+    <Content Include="icons\light\page_white_new.png" />
+    <Content Include="icons\light\page_white_picture.png" />
+    <Content Include="icons\light\page_white_powerpoint.png" />
+    <Content Include="icons\light\page_white_sound.png" />
+    <Content Include="icons\light\page_white_text.png" />
+    <Content Include="icons\light\page_white_visualstudio.png" />
+    <Content Include="icons\light\page_white_word.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\AppResources.resx">

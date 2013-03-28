@@ -23,15 +23,15 @@
         <DataTemplate x:Key="ContentsDataTemplate">
             <Grid Margin="0,0,0,12">
                 <StackPanel Orientation="Horizontal" Margin="0">
-                    <Image Width="68" Height="68" Source="{Binding MetaData.Icon, Converter={StaticResource DropboxIconConverter}}" Margin="-6,0,0,0"/>
+                    <Image Width="68" Height="68" Source="{Binding Icon, Converter={StaticResource DropboxIconConverter}}" Margin="-6,0,0,0"/>
                     <StackPanel Margin="0">
-                        <TextBlock TextWrapping="Wrap" Text="{Binding MetaData.Name}" Margin="0" FontSize="37.333" Height="54" d:LayoutOverrides="Width"/>
-                        <TextBlock TextWrapping="Wrap" FontSize="17.333" Text="{Binding MetaData.Size}" Margin="0,-6,0,0" Visibility="{Binding MetaData.Is_Dir, Converter={StaticResource BoolToNotVisConverter}}">
+                        <TextBlock TextWrapping="Wrap" Text="{Binding Name}" Margin="0" FontSize="37.333" Height="54" d:LayoutOverrides="Width"/>
+                        <TextBlock TextWrapping="Wrap" FontSize="17.333" Text="{Binding Size}" Margin="0,-6,0,0" Visibility="{Binding Is_Dir, Converter={StaticResource BoolToNotVisConverter}}">
                         	<TextBlock.Foreground>
                         		<SolidColorBrush Color="{StaticResource PhoneDisabledColor}"/>
                         	</TextBlock.Foreground>
                         </TextBlock>
-                        <TextBlock TextWrapping="Wrap" FontSize="17.333" Text="{Binding MetaData.Modified}" Margin="0,-6,0,0" Visibility="{Binding MetaData.Is_Dir, Converter={StaticResource BoolToVisConverter}}">
+                        <TextBlock TextWrapping="Wrap" FontSize="17.333" Text="{Binding Modified}" Margin="0,-6,0,0" Visibility="{Binding Is_Dir, Converter={StaticResource BoolToVisConverter}}">
                         	<TextBlock.Foreground>
                         		<SolidColorBrush Color="{StaticResource PhoneDisabledColor}"/>
                         	</TextBlock.Foreground>
