@@ -2,6 +2,7 @@
 
 namespace DropNet2.Models
 {
+    [DataContract]
     public class AccountInfo
     {
         [DataMember(Name = "referral_link")]
@@ -23,6 +24,7 @@ namespace DropNet2.Models
         public long Uid { get; set; }
     }
 
+   
     public class QuotaInfo
     {
         [DataMember(Name = "shared")]
