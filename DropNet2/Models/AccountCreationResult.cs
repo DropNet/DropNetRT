@@ -4,7 +4,6 @@ namespace DropNet2.Models
 {
     public class AccountCreationResult
     {
-        //local changes
         public enum ErrorTypes
         {
             Unknown,
