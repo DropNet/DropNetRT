@@ -1,14 +1,20 @@
-﻿namespace DropNet2.Models
+﻿using System.Runtime.Serialization;
+
+namespace DropNet2.Models
 {
     public class AccountCreationResult
     {
+        //local changes
         public enum ErrorTypes
         {
             Unknown,
             EmailInUse
         }
+        
+        [DataMember(Name = "success")]
+        public bool Success { get; set; }
 
-        public bool success { get; set; }
-        public ErrorTypes errorType { get; set; }
+        [DataMember(Name = "errorType")]
+        public ErrorTypes ErrorType { get; set; }
     }
 }

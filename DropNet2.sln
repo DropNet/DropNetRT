@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DropNet2", "DropNet2\DropNe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DropNet2Sample", "DropNet2Sample\DropNet2Sample.csproj", "{30BC4D5F-FF12-4EE2-8792-A00FF701302E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DropNet2Tests", "DropNet2Tests\DropNet2Tests.csproj", "{4892A78D-0053-4C4F-A683-F1ED48DDA4A7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,14 @@ Global
 		{30BC4D5F-FF12-4EE2-8792-A00FF701302E}.Release|x86.ActiveCfg = Release|x86
 		{30BC4D5F-FF12-4EE2-8792-A00FF701302E}.Release|x86.Build.0 = Release|x86
 		{30BC4D5F-FF12-4EE2-8792-A00FF701302E}.Release|x86.Deploy.0 = Release|x86
+		{4892A78D-0053-4C4F-A683-F1ED48DDA4A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4892A78D-0053-4C4F-A683-F1ED48DDA4A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4892A78D-0053-4C4F-A683-F1ED48DDA4A7}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{4892A78D-0053-4C4F-A683-F1ED48DDA4A7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4892A78D-0053-4C4F-A683-F1ED48DDA4A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4892A78D-0053-4C4F-A683-F1ED48DDA4A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4892A78D-0053-4C4F-A683-F1ED48DDA4A7}.Release|ARM.ActiveCfg = Release|Any CPU
+		{4892A78D-0053-4C4F-A683-F1ED48DDA4A7}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
