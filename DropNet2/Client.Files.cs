@@ -19,7 +19,7 @@ namespace DropNet2
         /// Gets MetaData for a file or folder given the path
         /// </summary>
         /// <param name="path">Path to file or folder</param>
-        /// <returns></returns>
+        /// <returns><see cref="MetaData"/> for a file or folder</returns>
         public async Task<MetaData> GetMetaData(string path)
         {
             var requestUrl = MakeRequestString(string.Format("1/metadata/{0}{1}", Root, path), ApiType.Base);

@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Net;
+using System.Net.Http;
 
 namespace DropNet2.Exceptions
 {
     public class DropboxException : Exception
     {
-        public System.Net.Http.HttpResponseMessage Response;
+        public HttpResponseMessage Response { get; private set; }
 
-        public HttpStatusCode StatusCode { get; set; }
+        public HttpStatusCode StatusCode { get; private set; }
 
         public DropboxException() { }
 
@@ -16,13 +17,14 @@ namespace DropNet2.Exceptions
             StatusCode = status;
         }
 
-        public DropboxException(System.Net.Http.HttpResponseMessage response)
+        public DropboxException(HttpResponseMessage response)
+            : this(response.StatusCode)
         {
             Response = response;
         }
 
         public DropboxException(Exception ex)
-            :base("Dropbox error occurred", ex)
+            : base("Dropbox error occurred", ex)
         {
         }
     }
