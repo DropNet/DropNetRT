@@ -51,10 +51,10 @@ namespace DropNet2Tests
             Assert.NotNull(user);
         }
 
-        private const string UserSecret = "<UserSecret>";
-        private const string UserToken = "<userToken>";
+        private const string UserSecret = "h18w80z4c7h5gmn";
+        private const string UserToken = "dkms8xc4x3mtm19";
 
-        private const string AppKey = "<AppKey>";
-        private const string AppSecret = "<AppSecret>";
+        private const string AppKey = "7zqu95o832tr0kb";
+        private const string AppSecret = "j1k6gklasd5knv5";
     }
 }

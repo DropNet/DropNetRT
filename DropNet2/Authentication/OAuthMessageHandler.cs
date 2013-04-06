@@ -1,12 +1,7 @@
 ﻿using DropNet2.HttpHelpers;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using DropNet2.Extensions;
 
 namespace DropNet2.Authentication
@@ -66,7 +61,7 @@ namespace DropNet2.Authentication
             return request;
         }
 
-        private object EncodeParameters(HttpRequest request)
+        private static object EncodeParameters(HttpRequest request)
         {
             var querystring = new StringBuilder();
             foreach (var p in request.Parameters)
@@ -81,7 +76,7 @@ namespace DropNet2.Authentication
             return querystring.ToString();
         }
 
-        private string GenerateNonce()
+        private static string GenerateNonce()
         {
             return Random.Next(0x1e208, 0x98967f).ToString();
         }
@@ -91,7 +86,7 @@ namespace DropNet2.Authentication
             return ApiSecret + "&" + UserSecret;
         }
 
-        private string GenerateTimeStamp()
+        private static string GenerateTimeStamp()
         {
             TimeSpan span = DateTime.UtcNow - new DateTime(0x7b2, 1, 1, 0, 0, 0, 0);
             return Convert.ToInt64(span.TotalSeconds).ToString();

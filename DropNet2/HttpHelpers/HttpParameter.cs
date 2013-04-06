@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace DropNet2.HttpHelpers
+﻿namespace DropNet2.HttpHelpers
 {
     public class HttpParameter
     {
         public HttpParameter(string name, object value)
         {
             // TODO: Complete member initialization
-            this.Name = name;
-            this.Value = value;
+            Name = name;
+            Value = value;
         }
 
         /// <summary>

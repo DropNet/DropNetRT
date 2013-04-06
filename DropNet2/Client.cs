@@ -4,11 +4,9 @@ using DropNet2.HttpHelpers;
 using DropNet2.Models;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DropNet2
