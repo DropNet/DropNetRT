@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net;
 using System.Threading.Tasks;
 using DropNet2;
@@ -58,7 +59,35 @@ namespace DropNet2Tests
             {
                 Assert.AreEqual(HttpStatusCode.NotFound, exception.StatusCode);
             }
+        }
+
+        [Test]
+        public async Task Given_Path_Get_A_Share_Link()
+        {
+            var share = await _client.GetShare("/photos");
             
+            Assert.NotNull(share);
+            Assert.IsNotNull(share.Url);
+
+            Debug.WriteLine(share.Url);
+        }
+
+        [Test]
+        public async Task Given_Search_String_Find_The_Matching_Items()
+        {
+            var items = await _client.Search("pdf");
+
+            Assert.IsNotNull(items);
+            Assert.AreEqual(1, items.Count);
+        }
+
+        [Test]
+        public async Task Given_Search_String_If_No_Items_Found_Return_Empty_List()
+        {
+            var items = await _client.Search("Does not exist");
+
+            Assert.IsNotNull(items);
+            Assert.AreEqual(0, items.Count);
         }
 
         private DropNetClient _client;

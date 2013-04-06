@@ -66,8 +66,9 @@ namespace DropNet2
         public async Task<List<MetaData>> Search(string searchString, string path)
         {
             var requestUrl = MakeRequestString(string.Format("1/search/{0}{1}", Root, path), ApiType.Base);
-
+            
             var request = new HttpRequest(HttpMethod.Get, requestUrl);
+            request.Parameters.Add(new HttpParameter("query", searchString));
 
             var response = await SendAsync<List<MetaData>>(request);
 
