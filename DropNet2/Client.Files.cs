@@ -1,16 +1,13 @@
 ﻿using DropNet2.Exceptions;
-using DropNet2.Helpers;
 using DropNet2.HttpHelpers;
 using DropNet2.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DropNet2
@@ -22,7 +19,7 @@ namespace DropNet2
         /// Gets MetaData for a file or folder given the path
         /// </summary>
         /// <param name="path">Path to file or folder</param>
-        /// <returns></returns>
+        /// <returns><see cref="MetaData"/> for a file or folder</returns>
         public async Task<MetaData> GetMetaData(string path)
         {
             var requestUrl = MakeRequestString(string.Format("1/metadata/{0}{1}", Root, path), ApiType.Base);
@@ -69,8 +66,9 @@ namespace DropNet2
         public async Task<List<MetaData>> Search(string searchString, string path)
         {
             var requestUrl = MakeRequestString(string.Format("1/search/{0}{1}", Root, path), ApiType.Base);
-
+            
             var request = new HttpRequest(HttpMethod.Get, requestUrl);
+            request.Parameters.Add(new HttpParameter("query", searchString));
 
             var response = await SendAsync<List<MetaData>>(request);
 
