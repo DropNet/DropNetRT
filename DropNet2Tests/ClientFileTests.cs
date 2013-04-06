@@ -90,6 +90,15 @@ namespace DropNet2Tests
             Assert.AreEqual(0, items.Count);
         }
 
+        [Test]
+        public async Task Give_Search_String_And_Path_Find_The_Matching_Items()
+        {
+            var items = await _client.Search("jpg", "/photos");
+
+            Assert.IsNotNull(items);
+            Assert.AreEqual(3, items.Count);
+        }
+  
         private DropNetClient _client;
 
         private const string UserSecret = "h18w80z4c7h5gmn";
