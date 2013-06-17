@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+  <metadata>
+    <id>DropNet2</id>
+    <version>1.0-beta</version>
+    <title>DropNet2</title>
+    <authors>Damian Karzon,  Github Contributors</authors>
+    <owners>Damian Karzon,  Github Contributors</owners>
+    <licenseUrl>https://github.com/dkarzon/DropNet2/blob/master/LICENSE.txt</licenseUrl>
+    <projectUrl>http://dkdevelopment.net/2013/03/28/dropnet2/</projectUrl>
+    <iconUrl>http://dkdevelopment.net/img/DropNetIcon.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Portable .NET library for the Dropbox API based on HttpClient</description>
+    <releaseNotes />
+    <copyright />
+    <language>en-AU</language>
+    <tags>DROPBOX API .NET WINDOWSPHONE</tags>
+    <dependencies>
+      <dependency id="Microsoft.Bcl.Async" version="1.0.16" />
+      <dependency id="Microsoft.Net.Http" version="2.2.3-beta" />
+      <dependency id="Newtonsoft.Json" version="5.0.6" />
+    </dependencies>
+  </metadata>
+</package>

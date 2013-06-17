@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>DropNet2</id>
+    <version>1.0-beta</version>
+    <authors>Damian Karzon, Github Contributors</authors>
+    <owners>Damian Karzon</owners>
+    <description>Portable .NET library for the Dropbox API based on HttpClient</description>
+    <language>en-AU</language>
+    <projectUrl>http://dkdevelopment.net/2013/03/28/dropnet2/</projectUrl>
+    <licenseUrl>https://github.com/dkarzon/DropNet2/blob/master/LICENSE.txt</licenseUrl>
+    <iconUrl>http://dkdevelopment.net/img/DropNetIcon.png</iconUrl>
+    <tags>DROPBOX API .NET WINDOWSPHONE</tags>
+  </metadata>
+</package>

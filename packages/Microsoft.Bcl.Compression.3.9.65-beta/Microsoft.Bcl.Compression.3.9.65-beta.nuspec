@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+  <metadata>
+    <id>Microsoft.Bcl.Compression</id>
+    <version>3.9.65-beta</version>
+    <title>Stream Compression and ZIP Archives</title>
+    <authors>Microsoft</authors>
+    <owners>Microsoft</owners>
+    <licenseUrl>http://go.microsoft.com/fwlink/?LinkID=279007</licenseUrl>
+    <projectUrl>http://go.microsoft.com/fwlink/?LinkID=282261</projectUrl>
+    <iconUrl>http://go.microsoft.com/fwlink/?LinkID=288859</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>Provides support Compressing streams and ZIP archives</description>
+    <summary>Provides support Compressing streams and ZIP archives</summary>
+    <copyright>Copyright © Microsoft Corporation</copyright>
+    <tags>Microsoft BCL IO Compression Zip GZip</tags>
+    <dependencies>
+      <dependency id="Microsoft.Bcl.Build" version="1.0.0-rc" />
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.IO.Compression" targetFramework=".NETFramework4.5" />
+    </frameworkAssemblies>
+  </metadata>
+</package>

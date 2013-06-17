@@ -48,6 +48,24 @@ namespace DropNet2
         }
 
         /// <summary>
+        /// Gets a share link from a give path
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="shortUrl"></param>
+        /// <returns></returns>
+        public async Task<ShareResponse> GetShare(string path, bool shortUrl)
+        {
+            var requestUrl = MakeRequestString(string.Format("1/shares/{0}{1}", Root, path), ApiType.Base);
+
+            var request = new HttpRequest(HttpMethod.Get, requestUrl);
+            request.Parameters.Add(new HttpParameter("short_url", shortUrl));
+
+            var response = await SendAsync<ShareResponse>(request);
+
+            return response;
+        }
+
+        /// <summary>
         /// Searches for a given text in the entire dropbox/sandbox folder
         /// </summary>
         /// <param name="searchString"></param>
