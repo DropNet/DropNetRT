@@ -12,7 +12,11 @@ namespace DropNet2.Extensions
         public static string UrlEncode(this string input)
         {
             return Uri.EscapeDataString(input);
-        }
+        }                
 
+        public static string CleanPath(this string input)
+        {
+            return input.TrimStart('/');
+        }
     }
 }
