@@ -381,6 +381,18 @@ namespace DropNet2
             return await response.Content.ReadAsByteArrayAsync();
         }
 
+        public Uri GetThumbnailUrl(string path, ThumbnailSize size)
+        {
+            var requestUrl = MakeRequestString(string.Format("1/thumbnails/{0}/{1}", Root, path.CleanPath()), ApiType.Content);
+
+            var request = new HttpRequest(HttpMethod.Get, requestUrl);
+            request.AddParameter("size", ThumbnailSizeString(size));
+
+            _oauthHandler.Authenticate(request);
+
+            return request.RequestUri;
+        }
+
 
         /// <summary>
         /// Gets the deltas for a user's folders and files.

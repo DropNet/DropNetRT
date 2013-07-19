@@ -91,7 +91,7 @@ namespace DropNet2
         /// </summary>
         /// <param name="urlParams"></param>
         /// <returns></returns>
-        private UserLogin GetUserLoginFromParams(string urlParams)
+        protected UserLogin GetUserLoginFromParams(string urlParams)
         {
             var userLogin = new UserLogin();
 
