@@ -1,0 +1,65 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="DropNetRT.Sample.WP8.ContentsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:sample_converters="clr-namespace:DropNetRT.Sample.WP8.Converters"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    shell:SystemTray.IsVisible="True">
+	
+    <phone:PhoneApplicationPage.Resources>
+
+        <sample_converters:BoolToNotVisConverter x:Key="BoolToNotVisConverter"/>
+        <sample_converters:BoolToVisConverter x:Key="BoolToVisConverter"/>
+        <sample_converters:DropboxIconConverter x:Key="DropboxIconConverter"/>
+
+        <DataTemplate x:Key="ContentsDataTemplate">
+            <Grid Margin="0,0,0,12">
+                <StackPanel Orientation="Horizontal" Margin="0">
+                    <Image Width="68" Height="68" Source="{Binding Icon, Converter={StaticResource DropboxIconConverter}}" Margin="-6,0,0,0"/>
+                    <StackPanel Margin="0">
+                        <TextBlock TextWrapping="Wrap" Text="{Binding Name}" Margin="0" FontSize="37.333" Height="54" d:LayoutOverrides="Width"/>
+                        <TextBlock TextWrapping="Wrap" FontSize="17.333" Text="{Binding Size}" Margin="0,-6,0,0" Visibility="{Binding Is_Dir, Converter={StaticResource BoolToNotVisConverter}}">
+                        	<TextBlock.Foreground>
+                        		<SolidColorBrush Color="{StaticResource PhoneDisabledColor}"/>
+                        	</TextBlock.Foreground>
+                        </TextBlock>
+                        <TextBlock TextWrapping="Wrap" FontSize="17.333" Text="{Binding Modified}" Margin="0,-6,0,0" Visibility="{Binding Is_Dir, Converter={StaticResource BoolToVisConverter}}">
+                        	<TextBlock.Foreground>
+                        		<SolidColorBrush Color="{StaticResource PhoneDisabledColor}"/>
+                        	</TextBlock.Foreground>
+                        </TextBlock>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+    </phone:PhoneApplicationPage.Resources>
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot" Background="Transparent" d:DataContext="{d:DesignData /SampleData/ContentsViewModelSampleData.xaml, Instance={x:Null}}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="768"/>
+        </Grid.RowDefinitions>
+
+        <!--TitlePanel contains the name of the application and page title-->
+        <StackPanel Grid.Row="0" Margin="12,0,0,0">
+            <TextBlock Text="DROPNET SAMPLE" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <TextBlock Text="{Binding MetaData.Path}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}" FontSize="29.333">
+            	<TextBlock.Foreground>
+            		<SolidColorBrush Color="{StaticResource PhoneAccentColor}"/>
+            	</TextBlock.Foreground>
+            </TextBlock>
+			<ListBox x:Name="lsbContents" ItemsSource="{Binding Contents}" ItemTemplate="{StaticResource ContentsDataTemplate}" SelectionChanged="lsbContents_SelectionChanged" Margin="12,0" />
+        </StackPanel>
+
+        <!--ContentPanel - place additional content here-->
+    </Grid>
+
+</phone:PhoneApplicationPage>
