@@ -50,8 +50,16 @@ namespace DropNetRT
 
             if (_oauthHandler != null) //not sure when this would ever be null
             {
-                _oauthHandler.UserToken = userLogin.Token;
-                _oauthHandler.UserSecret = userLogin.Secret;
+                if (userLogin == null) //logout
+                {
+                    _oauthHandler.UserToken = string.Empty;
+                    _oauthHandler.UserSecret = string.Empty;
+                }
+                else
+                {
+                    _oauthHandler.UserToken = userLogin.Token;
+                    _oauthHandler.UserSecret = userLogin.Secret;
+                }
             }
         }
 
