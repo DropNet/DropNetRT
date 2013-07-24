@@ -1,7 +1,10 @@
-﻿using DropNetRT.Models;
+﻿using DropNetRT.HttpHelpers;
+using DropNetRT.Extensions;
+using DropNetRT.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 
 namespace DropNetRT
 {
@@ -136,7 +139,42 @@ namespace DropNetRT
                 deltaEntry.MetaData = JsonConvert.DeserializeObject<MetaData>(stringList[1]);
             }
             return deltaEntry;
-        } 
+        }
+
+
+        private HttpRequest MakeGetFileRequest(string path)
+        {
+            var requestUrl = MakeRequestString(string.Format("1/files/{0}/{1}", Root, path.CleanPath()), ApiType.Content);
+
+            var request = new HttpRequest(HttpMethod.Get, requestUrl);
+
+            _oauthHandler.Authenticate(request);
+
+            return request;
+        }
+
+        private HttpRequest MakeThumbnailRequest(string path, ThumbnailSize size)
+        {
+            var requestUrl = MakeRequestString(string.Format("1/thumbnails/{0}/{1}", Root, path.CleanPath()), ApiType.Content);
+
+            var request = new HttpRequest(HttpMethod.Get, requestUrl);
+            request.AddParameter("size", ThumbnailSizeString(size));
+
+            _oauthHandler.Authenticate(request);
+
+            return request;
+        }
+
+        private HttpRequest MakeUploadRequest(string path, string filename)
+        {
+            var requestUrl = MakeRequestString(string.Format("1/files/{0}/{1}", Root, path.CleanPath()), ApiType.Content);
+
+            var request = new HttpRequest(HttpMethod.Post, requestUrl);
+
+            _oauthHandler.Authenticate(request);
+
+            return request;
+        }
 
     }
 }

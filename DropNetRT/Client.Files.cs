@@ -141,15 +141,11 @@ namespace DropNetRT
         /// <summary>
         /// Gets a file from the given path
         /// </summary>
-        /// <param name="path"></param>
+        /// <param name="path">Path of the file in Dropbox to go</param>
         /// <returns></returns>
         public async Task<byte[]> GetFile(string path)
         {
-            var requestUrl = MakeRequestString(string.Format("1/files/{0}/{1}", Root, path.CleanPath()), ApiType.Content);
-
-            var request = new HttpRequest(HttpMethod.Get, requestUrl);
-
-            _oauthHandler.Authenticate(request);
+            var request = MakeGetFileRequest(path);
 
             var response = await _httpClient.SendAsync(request);
 
@@ -158,6 +154,31 @@ namespace DropNetRT
             return await response.Content.ReadAsByteArrayAsync();
         }
 
+        /// <summary>
+        /// Gets a file download uri with user authentication added (for use with Background Transfers)
+        /// </summary>
+        /// <param name="path">Path of the file in Dropbox to go</param>
+        /// <returns></returns>
+        public Uri GetFileUrl(string path)
+        {
+            var request = MakeGetFileRequest(path);
+
+            return request.RequestUri;
+        }
+
+
+        /// <summary>
+        /// Gets the upload Uri for a file (for use with Background Transfers)
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        public Uri UploadUrl(string path, string filename)
+        {
+            var request = MakeUploadRequest(path, filename);
+
+            return request.RequestUri;
+        }
 
         /// <summary>
         /// Uploads a file to a Dropbox folder
@@ -168,11 +189,7 @@ namespace DropNetRT
         /// <returns></returns>
         public async Task<MetaData> Upload(string path, string filename, byte[] fileData)
         {
-            var requestUrl = MakeRequestString(string.Format("1/files/{0}/{1}", Root, path.CleanPath()), ApiType.Content);
-
-            var request = new HttpRequest(HttpMethod.Post, requestUrl);
-
-            _oauthHandler.Authenticate(request);
+            var request = MakeUploadRequest(path, filename);
 
             var content = new MultipartFormDataContent(_formBoundary);
 
@@ -193,7 +210,7 @@ namespace DropNetRT
             HttpResponseMessage response;
             try
             {
-                response = await _httpClient.PostAsync(requestUrl, content);
+                response = await _httpClient.PostAsync(request.RequestUri, content);
             }
             catch (Exception ex)
             {
@@ -329,7 +346,7 @@ namespace DropNetRT
         }
 
         /// <summary>
-        /// Gets the thumbnail of an image given its MetaData
+        /// Gets the thumbnail of an image given its MetaData (default size = small)
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
@@ -350,7 +367,7 @@ namespace DropNetRT
         }
 
         /// <summary>
-        /// Gets the thumbnail of an image given its path
+        /// Gets the thumbnail of an image given its path (default size = small)
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
@@ -367,28 +384,34 @@ namespace DropNetRT
         /// <returns></returns>
         public async Task<byte[]> GetThumbnail(string path, ThumbnailSize size)
         {
-            var requestUrl = MakeRequestString(string.Format("1/thumbnails/{0}/{1}", Root, path.CleanPath()), ApiType.Content);
-
-            var request = new HttpRequest(HttpMethod.Get, requestUrl);
-            request.AddParameter("size", ThumbnailSizeString(size));
-
-            _oauthHandler.Authenticate(request);
+            var request = MakeThumbnailRequest(path, size);
 
             var response = await _httpClient.SendAsync(request);
-
-            //TODO - Error Handling
 
             return await response.Content.ReadAsByteArrayAsync();
         }
 
+        /// <summary>
+        /// Gets a url for the thumbnail of an image (default size = small)
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public Uri GetThumbnailUrl(string path)
+        {
+            var request = MakeThumbnailRequest(path, ThumbnailSize.Small);
+
+            return request.RequestUri;
+        }
+
+        /// <summary>
+        /// Gets a url for the thumbnail of an image
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="size"></param>
+        /// <returns></returns>
         public Uri GetThumbnailUrl(string path, ThumbnailSize size)
         {
-            var requestUrl = MakeRequestString(string.Format("1/thumbnails/{0}/{1}", Root, path.CleanPath()), ApiType.Content);
-
-            var request = new HttpRequest(HttpMethod.Get, requestUrl);
-            request.AddParameter("size", ThumbnailSizeString(size));
-
-            _oauthHandler.Authenticate(request);
+            var request = MakeThumbnailRequest(path, size);
 
             return request.RequestUri;
         }
