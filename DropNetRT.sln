@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30110.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DropNetRT", "DropNetRT\DropNetRT.csproj", "{CBD8709C-B82D-44ED-8F31-963B7EED2BA9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DropNetRT.Sample.WP8", "DropNetRT.Sample.WP8\DropNetRT.Sample.WP8.csproj", "{30BC4D5F-FF12-4EE2-8792-A00FF701302E}"
