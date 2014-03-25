@@ -167,6 +167,11 @@ namespace DropNetRT
 
             //TODO - Error Handling
 
+            if (HttpStatusCode.OK != response.StatusCode)
+            {
+                throw new DropboxException(response.StatusCode);
+            }
+
             return await response.Content.ReadAsStreamAsync();
         }
 
