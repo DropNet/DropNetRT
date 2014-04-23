@@ -1,5 +1,7 @@
-﻿namespace DropNetRT.Models
+﻿using System.Runtime.Serialization;
+namespace DropNetRT.Models
 {
+    [DataContract]
     public class UserLogin
     {
         public string Token { get; set; }

@@ -20,8 +20,8 @@ namespace DropNetRT
         /// Gets MetaData for a file or folder given the path
         /// </summary>
         /// <param name="path">Path to file or folder</param>
-        /// <returns><see cref="MetaData"/> for a file or folder</returns>
-        public async Task<MetaData> GetMetaData(string path, string hash = null)
+        /// <returns><see cref="Metadata"/> for a file or folder</returns>
+        public async Task<Metadata> GetMetaData(string path, string hash = null)
         {
             return await GetMetaData(path, hash, null, true, false);
         }
@@ -30,8 +30,8 @@ namespace DropNetRT
         /// Shorthand for a GetMetadata call without contents listing
         /// </summary>
         /// <param name="path">Path to file or folder</param>
-        /// <returns><see cref="MetaData"/> for a file or folder</returns>
-        public async Task<MetaData> GetMetaDataNoList(string path, string hash = null)
+        /// <returns><see cref="Metadata"/> for a file or folder</returns>
+        public async Task<Metadata> GetMetaDataNoList(string path, string hash = null)
         {
             return await GetMetaData(path, hash, null, false, false);
         }
@@ -40,8 +40,8 @@ namespace DropNetRT
         /// Shorthand for a GetMetadata call with deleted files
         /// </summary>
         /// <param name="path">Path to file or folder</param>
-        /// <returns><see cref="MetaData"/> for a file or folder</returns>
-        public async Task<MetaData> GetMetaDataWithDeleted(string path, string hash = null)
+        /// <returns><see cref="Metadata"/> for a file or folder</returns>
+        public async Task<Metadata> GetMetaDataWithDeleted(string path, string hash = null)
         {
             return await GetMetaData(path, hash, null, true, true);
         }
@@ -55,7 +55,7 @@ namespace DropNetRT
         /// <param name="list"> If true, the folder's metadata will include a contents field with a list of metadata entries for the contents of the folder. If false, the contents field will be omitted.</param>
         /// <param name="includeDeleted">Only applicable when list is set. If this parameter is set to true, then contents will include the metadata of deleted children. Note that the target of the metadata call is always returned even when it has been deleted (with is_deleted set to true) regardless of this flag.</param>
         /// <returns></returns>
-        public async Task<MetaData> GetMetaData(string path, string hash, int? rev, bool list, bool includeDeleted)
+        public async Task<Metadata> GetMetaData(string path, string hash, int? rev, bool list, bool includeDeleted)
         {
             var requestUrl = MakeRequestString(string.Format("1/metadata/{0}/{1}", Root, path.CleanPath()), ApiType.Base);
 
@@ -71,7 +71,7 @@ namespace DropNetRT
                 request.Parameters.Add(new HttpParameter("rev", rev));
             }
 
-            var response = await SendAsync<MetaData>(request);
+            var response = await SendAsync<Metadata>(request);
 
             return response;
         }
@@ -115,7 +115,7 @@ namespace DropNetRT
         /// </summary>
         /// <param name="searchString"></param>
         /// <returns></returns>
-        public async Task<List<MetaData>> Search(string searchString)
+        public async Task<List<Metadata>> Search(string searchString)
         {
             return await Search(searchString, string.Empty);
         }
@@ -126,14 +126,14 @@ namespace DropNetRT
         /// <param name="searchString"></param>
         /// <param name="path"></param>
         /// <returns></returns>
-        public async Task<List<MetaData>> Search(string searchString, string path)
+        public async Task<List<Metadata>> Search(string searchString, string path)
         {
             var requestUrl = MakeRequestString(string.Format("1/search/{0}/{1}", Root, path.CleanPath()), ApiType.Base);
             
             var request = new HttpRequest(HttpMethod.Get, requestUrl);
             request.Parameters.Add(new HttpParameter("query", searchString));
 
-            var response = await SendAsync<List<MetaData>>(request);
+            var response = await SendAsync<List<Metadata>>(request);
 
             return response;
         }
@@ -187,7 +187,7 @@ namespace DropNetRT
         /// <param name="filename"></param>
         /// <param name="fileData"></param>
         /// <returns></returns>
-        public async Task<MetaData> Upload(string path, string filename, byte[] fileData)
+        public async Task<Metadata> Upload(string path, string filename, byte[] fileData)
         {
             var request = MakeUploadRequest(path, filename);
 
@@ -225,7 +225,7 @@ namespace DropNetRT
 
             string responseBody = await response.Content.ReadAsStringAsync();
 
-            return JsonConvert.DeserializeObject<MetaData>(responseBody);
+            return JsonConvert.DeserializeObject<Metadata>(responseBody);
         }
 
 
@@ -236,7 +236,7 @@ namespace DropNetRT
         /// <param name="filename"></param>
         /// <param name="fileStream"></param>
         /// <returns></returns>
-        public async Task<MetaData> Upload(string path, string filename, Stream fileStream)
+        public async Task<Metadata> Upload(string path, string filename, Stream fileStream)
         {
             var rawBytes = ReadFully(fileStream);
             return await Upload(path, filename, rawBytes);
@@ -257,7 +257,7 @@ namespace DropNetRT
         /// </summary>
         /// <param name="path">The Path of the file or folder to delete.</param>
         /// <returns></returns>
-        public async Task<MetaData> Delete(string path)
+        public async Task<Metadata> Delete(string path)
         {
             var requestUrl = MakeRequestString("1/fileops/delete", ApiType.Base);
 
@@ -265,7 +265,7 @@ namespace DropNetRT
             request.AddParameter("path", path);
             request.AddParameter("root", Root);
 
-            var response = await SendAsync<MetaData>(request);
+            var response = await SendAsync<Metadata>(request);
 
             return response;
         }
@@ -276,7 +276,7 @@ namespace DropNetRT
         /// <param name="fromPath"></param>
         /// <param name="toPath"></param>
         /// <returns></returns>
-        public async Task<MetaData> Copy(string fromPath, string toPath)
+        public async Task<Metadata> Copy(string fromPath, string toPath)
         {
             var requestUrl = MakeRequestString("1/fileops/copy", ApiType.Base);
 
@@ -285,7 +285,7 @@ namespace DropNetRT
             request.AddParameter("to_path", toPath);
             request.AddParameter("root", Root);
 
-            var response = await SendAsync<MetaData>(request);
+            var response = await SendAsync<Metadata>(request);
 
             return response;
         }
@@ -296,7 +296,7 @@ namespace DropNetRT
         /// <param name="fromPath"></param>
         /// <param name="toPath"></param>
         /// <returns></returns>
-        public async Task<MetaData> Move(string fromPath, string toPath)
+        public async Task<Metadata> Move(string fromPath, string toPath)
         {
             var requestUrl = MakeRequestString("1/fileops/move", ApiType.Base);
 
@@ -305,7 +305,7 @@ namespace DropNetRT
             request.AddParameter("to_path", toPath);
             request.AddParameter("root", Root);
 
-            var response = await SendAsync<MetaData>(request);
+            var response = await SendAsync<Metadata>(request);
 
             return response;
         }
@@ -315,7 +315,7 @@ namespace DropNetRT
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public async Task<MetaData> CreateFolder(string path)
+        public async Task<Metadata> CreateFolder(string path)
         {
             var requestUrl = MakeRequestString("1/fileops/create_folder", ApiType.Base);
 
@@ -323,7 +323,7 @@ namespace DropNetRT
             request.AddParameter("path", path);
             request.AddParameter("root", Root);
 
-            var response = await SendAsync<MetaData>(request);
+            var response = await SendAsync<Metadata>(request);
 
             return response;
         }
@@ -350,7 +350,7 @@ namespace DropNetRT
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
-        public async Task<byte[]> GetThumbnail(MetaData file)
+        public async Task<byte[]> GetThumbnail(Metadata file)
         {
             return await GetThumbnail(file.Path, ThumbnailSize.Small);
         }
@@ -361,7 +361,7 @@ namespace DropNetRT
         /// <param name="file"></param>
         /// <param name="size"></param>
         /// <returns></returns>
-        public async Task<byte[]> GetThumbnail(MetaData file, ThumbnailSize size)
+        public async Task<byte[]> GetThumbnail(Metadata file, ThumbnailSize size)
         {
             return await GetThumbnail(file.Path, size);
         }

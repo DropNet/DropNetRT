@@ -56,7 +56,7 @@ namespace DropNetRT.Models
         ///     If the new entry is a folder, check what your local state has at Path. If it's a file, replace it with the new entry.
         ///       If it's a folder, apply the new MetaData to the folder, but do not modify the folder's children.
         /// </summary>
-        public MetaData MetaData { get; set; }
+        public Metadata MetaData { get; set; }
     }
 
 }

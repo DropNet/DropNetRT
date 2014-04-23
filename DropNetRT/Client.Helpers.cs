@@ -136,7 +136,7 @@ namespace DropNetRT
             };
             if (!String.IsNullOrEmpty(stringList[1]))
             {
-                deltaEntry.MetaData = JsonConvert.DeserializeObject<MetaData>(stringList[1]);
+                deltaEntry.MetaData = JsonConvert.DeserializeObject<Metadata>(stringList[1]);
             }
             return deltaEntry;
         }

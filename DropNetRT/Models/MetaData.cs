@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 namespace DropNetRT.Models
 {
     [DataContract]
-    public class MetaData
+    public class Metadata
     {
         [DataMember(Name = "hash")]
         public string Hash { get; set; }
@@ -44,7 +44,7 @@ namespace DropNetRT.Models
         public string Rev { get; set; }
 
         [DataMember(Name = "contents")]
-        public List<MetaData> Contents { get; set; }
+        public List<Metadata> Contents { get; set; }
 
         [IgnoreDataMember]
         public DateTime ModifiedDate
