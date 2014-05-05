@@ -19,6 +19,9 @@ namespace DropNetRT.Models
         [DataMember(Name = "modified")]
         public string Modified { get; set; }
 
+        [DataMember(Name = "client_mtime")]
+        public string ClientMtime { get; set; }
+
         [DataMember(Name = "path")]
         public string Path { get; set; }
 
@@ -51,8 +54,7 @@ namespace DropNetRT.Models
         {
             get
             {
-                //cast to datetime and return
-                return DateTime.Parse(Modified); //RFC1123 format date codes are returned by API
+                return GetDateTimeFromString(Modified);
             }
         }
 
@@ -61,14 +63,33 @@ namespace DropNetRT.Models
         {
             get
             {
-                string str = Modified;
-                if (str.EndsWith(" +0000")) str = str.Substring(0, str.Length - 6);
-                if (!str.EndsWith(" UTC")) str += " UTC";
-                return DateTime.ParseExact(str, "ddd, d MMM yyyy HH:mm:ss UTC", System.Globalization.CultureInfo.InvariantCulture);
+                return GetUTCDateTimeFromString(Modified);
             }
             set
             {
-                Modified = value.ToString("ddd, d MMM yyyy HH:mm:ss UTC");
+                Modified = GetStringFromDateTime(value);
+            }
+        }
+
+        [IgnoreDataMember]
+        public DateTime ClientMtimeDate
+        {
+            get
+            {
+                return GetDateTimeFromString(ClientMtime);
+            }
+        }
+
+        [IgnoreDataMember]
+        public DateTime UTCDateClientMtime
+        {
+            get
+            {
+                return GetUTCDateTimeFromString(ClientMtime);
+            }
+            set
+            {
+                ClientMtime = GetStringFromDateTime(value);
             }
         }
 
@@ -109,6 +130,25 @@ namespace DropNetRT.Models
 
                 return IsDirectory ? string.Empty : Path.Substring(Path.LastIndexOf("."));
             }
+        }
+
+        private static DateTime GetDateTimeFromString(string dateTimeStr)
+        {
+            //cast to datetime and return
+            return DateTime.Parse(dateTimeStr); //RFC1123 format date codes are returned by API
+        }
+
+        private static DateTime GetUTCDateTimeFromString(string dateTimeStr)
+        {
+            string str = dateTimeStr;
+            if (str.EndsWith(" +0000")) str = str.Substring(0, str.Length - 6);
+            if (!str.EndsWith(" UTC")) str += " UTC";
+            return DateTime.ParseExact(str, "ddd, d MMM yyyy HH:mm:ss UTC", System.Globalization.CultureInfo.InvariantCulture);
+        }
+
+        private static string GetStringFromDateTime(DateTime dateTime)
+        {
+            return dateTime.ToString("ddd, d MMM yyyy HH:mm:ss UTC");
         }
     }
 
