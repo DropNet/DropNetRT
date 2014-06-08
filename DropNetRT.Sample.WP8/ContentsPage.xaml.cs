@@ -54,7 +54,7 @@ namespace DropNetRT.Sample.WP8
         {
             if (e.AddedItems.Count > 0)
             {
-                var selected = (e.AddedItems[0] as MetaData);
+                var selected = (e.AddedItems[0] as Metadata);
 
                 if (selected == null) return;
 

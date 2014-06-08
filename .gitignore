@@ -109,3 +109,5 @@ Backup*/
 UpgradeLog*.XML
 
 .DS_Store
+
+/packages

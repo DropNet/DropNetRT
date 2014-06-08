@@ -13,8 +13,8 @@ namespace DropNetRT.Sample.WP8.ViewModels
 {
     public class ContentsViewModel : BaseViewModel
     {
-        private MetaData _meta;
-        public MetaData MetaData
+        private Metadata _meta;
+        public Metadata MetaData
         {
             get { return _meta; }
             set
@@ -24,8 +24,8 @@ namespace DropNetRT.Sample.WP8.ViewModels
             }
         }
 
-        private ObservableCollection<MetaData> _contents;
-        public ObservableCollection<MetaData> Contents
+        private ObservableCollection<Metadata> _contents;
+        public ObservableCollection<Metadata> Contents
         {
             get { return _contents; }
             set
@@ -35,8 +35,8 @@ namespace DropNetRT.Sample.WP8.ViewModels
             }
         }
 
-        private MetaData _selectedMeta;
-        public MetaData SelectedMeta
+        private Metadata _selectedMeta;
+        public Metadata SelectedMeta
         {
             get { return _selectedMeta; }
             set

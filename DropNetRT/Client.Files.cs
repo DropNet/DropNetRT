@@ -257,7 +257,7 @@ namespace DropNetRT
         /// <param name="filename"></param>
         /// <param name="stream"></param>
         /// <returns></returns>
-        public async Task<Metadata> Upload(string path, string filename, Stream fileStream)
+        public async Task<Metadata> Upload(string path, string filename, Stream stream)
         {
             var request = MakeUploadPutRequest(path, filename);
 
@@ -282,7 +282,7 @@ namespace DropNetRT
 
             var responseBody = await response.Content.ReadAsStringAsync();
 
-            return JsonConvert.DeserializeObject<MetaData>(responseBody);
+            return JsonConvert.DeserializeObject<Metadata>(responseBody);
         }
 
 

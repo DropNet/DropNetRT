@@ -2,13 +2,13 @@
 <package>
   <metadata>
     <id>DropNetRT</id>
-    <version>1.1</version>
+    <version>1.2</version>
     <authors>Damian Karzon, Github Contributors</authors>
     <owners>Damian Karzon</owners>
     <description>Portable .NET library for the Dropbox API based on Portable HttpClient</description>
     <language>en-AU</language>
-    <projectUrl>http://dkdevelopment.net/projects/dropnetrt/</projectUrl>
-    <licenseUrl>https://github.com/dkarzon/DropNet2/blob/master/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/DropNet/DropNetRT</projectUrl>
+    <licenseUrl>https://raw.githubusercontent.com/DropNet/DropNetRT/master/LICENSE.txt</licenseUrl>
     <iconUrl>http://dkdevelopment.net/img/DropNetIcon.png</iconUrl>
     <tags>DROPBOX API .NET WINDOWSPHONE WINRT</tags>
   </metadata>
