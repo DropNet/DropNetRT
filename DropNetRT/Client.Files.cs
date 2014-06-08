@@ -155,6 +155,27 @@ namespace DropNetRT
         }
 
         /// <summary>
+        /// Gets a file stream from the given path
+        /// </summary>
+        /// <param name="path">Path of the file in Dropbox to go</param>
+        /// <returns></returns>
+        public async Task<Stream> GetFileStream(string path)
+        {
+            var request = MakeGetFileRequest(path);
+
+            var response = await _httpClient.SendAsync(request);
+
+            //TODO - Error Handling
+
+            if (HttpStatusCode.OK != response.StatusCode)
+            {
+                throw new DropboxException(response.StatusCode);
+            }
+
+            return await response.Content.ReadAsStreamAsync();
+        }
+
+        /// <summary>
         /// Gets a file download uri with user authentication added (for use with Background Transfers)
         /// </summary>
         /// <param name="path">Path of the file in Dropbox to go</param>
@@ -230,25 +251,38 @@ namespace DropNetRT
 
 
         /// <summary>
-        /// Uploads a file to a Dropbox folder
+        /// Uploads a streamed data to a Dropbox folder
         /// </summary>
         /// <param name="path"></param>
         /// <param name="filename"></param>
-        /// <param name="fileStream"></param>
+        /// <param name="stream"></param>
         /// <returns></returns>
         public async Task<Metadata> Upload(string path, string filename, Stream fileStream)
         {
-            var rawBytes = ReadFully(fileStream);
-            return await Upload(path, filename, rawBytes);
-        }
+            var request = MakeUploadPutRequest(path, filename);
 
-        private byte[] ReadFully(Stream input)
-        {
-            using (MemoryStream ms = new MemoryStream())
+            var content = new StreamContent(stream);
+
+            HttpResponseMessage response;
+
+            try
             {
-                input.CopyTo(ms);
-                return ms.ToArray();
+                response = await _httpClient.PutAsync(request.RequestUri, content);
             }
+            catch (Exception ex)
+            {
+                throw new DropboxException(ex);
+            }
+
+            //TODO - More Error Handling
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                throw new DropboxException(response);
+            }
+
+            var responseBody = await response.Content.ReadAsStringAsync();
+
+            return JsonConvert.DeserializeObject<MetaData>(responseBody);
         }
 
 
