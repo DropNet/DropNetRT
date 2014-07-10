@@ -70,5 +70,20 @@ namespace DropNetRT
             return response;
         }
 
+
+        /// <summary>
+        /// Gets the oauth2 token for current logged in user
+        /// </summary>
+        /// <returns></returns>
+        public async Task<string> GetOAuth2Token()
+        {
+            var requestUrl = MakeRequestString("1/oauth2/token_from_oauth1", ApiType.Base);
+
+            var request = new HttpRequest (HttpMethod.Post, requestUrl);
+
+            var response = await SendAsync<OAuth2TokenResponse>(request);
+
+            return response.Token;
+        }
     }
 }
