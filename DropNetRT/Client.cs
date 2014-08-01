@@ -1,4 +1,5 @@
-﻿using DropNetRT.Authentication;
+﻿using System.Threading;
+using DropNetRT.Authentication;
 using DropNetRT.Exceptions;
 using DropNetRT.HttpHelpers;
 using DropNetRT.Models;
@@ -115,8 +116,9 @@ namespace DropNetRT
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        private async Task<T> SendAsync<T>(HttpRequest request) where T : class
+        private async Task<T> SendAsync<T>(HttpRequest request, CancellationToken cancellationToken) where T : class
         {
             //Authenticate with oauth
             _oauthHandler.Authenticate(request);
@@ -124,7 +126,7 @@ namespace DropNetRT
             HttpResponseMessage response;
             try
             {
-                response = await _httpClient.SendAsync(request);
+                response = await _httpClient.SendAsync(request, cancellationToken);
             }
             catch (Exception ex)
             {
