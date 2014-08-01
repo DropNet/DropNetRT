@@ -490,6 +490,36 @@ namespace DropNetRT
             return deltaPage;
         }
 
+        /// <summary>
+        /// A long-poll endpoint to wait for changes on an account. In conjunction with /delta, this call gives you a low-latency way to monitor an account for file changes.
+        /// </summary>
+        /// <param name="cursor">The value returned from the prior call to GetDelta.</param>
+        /// <param name="timeout">An optional integer indicating a timeout, in seconds.
+        ///  The default value is 30 seconds, which is also the minimum allowed value. The maximum is 480 seconds.</param>
+        /// <returns></returns>
+        public async Task<LongpollDeltaResult> GetLongpollDelta(string cursor, int timeout = 30)
+        {
+            var requestUrl = MakeRequestString("1/longpoll_delta", ApiType.Base);
 
+            var request = new HttpRequest(HttpMethod.Get, requestUrl);
+
+            request.AddParameter("cursor", cursor);
+
+            if (timeout < 30)
+                timeout = 30;
+            if (timeout > 480)
+                timeout = 480;
+            request.AddParameter("timeout", timeout);
+
+            _oauthHandler.Authenticate(request);
+
+            var response = await _httpClient.SendAsync(request);
+
+            //TODO - Error Handling
+
+            string responseBody = await response.Content.ReadAsStringAsync();
+
+            return JsonConvert.DeserializeObject<LongpollDeltaResult>(responseBody);
+        }
     }
 }
