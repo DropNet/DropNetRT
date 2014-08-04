@@ -16,6 +16,7 @@ namespace DropNetRT
     {
         private const string ApiBaseUrl = "https://api.dropbox.com";
         private const string ApiContentBaseUrl = "https://api-content.dropbox.com";
+        private const string ApiNotifyBaseUrl = "https://api-notify.dropbox.com";
 
         /// <summary>
         /// Do not set this property directly, instead use SetUserToken
@@ -107,7 +108,8 @@ namespace DropNetRT
         enum ApiType
         {
             Base,
-            Content
+            Content,
+            Notify
         }
 
 

@@ -75,7 +75,22 @@ namespace DropNetRT
         private string MakeRequestString(string action, ApiType apiType)
         {
             //TODO - check for /
-            return string.Format("{0}/{1}", apiType == ApiType.Base ? ApiBaseUrl : ApiContentBaseUrl, action);
+            return string.Format("{0}/{1}", GetBaseUrl(apiType), action);
+        }
+
+        private static string GetBaseUrl(ApiType apiType)
+        {
+            switch (apiType)
+            {
+                case ApiType.Base:
+                    return ApiBaseUrl;
+                case ApiType.Content:
+                    return ApiContentBaseUrl;
+                case ApiType.Notify:
+                    return ApiNotifyBaseUrl;
+                default:
+                    throw new ArgumentOutOfRangeException("apiType");
+            }
         }
 
 
