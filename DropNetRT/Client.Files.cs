@@ -672,7 +672,7 @@ namespace DropNetRT
 
             foreach (var stringList in deltaResponse.Entries)
             {
-                deltaPage.Entries.Add(StringListToDeltaEntry(stringList));
+                deltaPage.Entries.Add(JRawListToDeltaEntry(stringList));
             }
 
             return deltaPage;

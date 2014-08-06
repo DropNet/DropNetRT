@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using Newtonsoft.Json.Linq;
 
 namespace DropNetRT
 {
@@ -139,19 +140,19 @@ namespace DropNetRT
         }
 
         /// <summary>
-        /// Builds a DeltaEntry object from a list of string responses
+        /// Builds a DeltaEntry object from a list of JRaw responses
         /// </summary>
         /// <param name="stringList"></param>
         /// <returns></returns>
-        private DeltaEntry StringListToDeltaEntry(List<string> stringList)
+        private DeltaEntry JRawListToDeltaEntry(List<JRaw> stringList)
         {
             var deltaEntry = new DeltaEntry
             {
-                Path = stringList[0]
+                Path = JToken.Parse(stringList[0].ToString()).Value<string>()
             };
-            if (!String.IsNullOrEmpty(stringList[1]))
+            if (!String.IsNullOrEmpty(stringList[1].ToString()))
             {
-                deltaEntry.MetaData = JsonConvert.DeserializeObject<Metadata>(stringList[1]);
+                deltaEntry.MetaData = JsonConvert.DeserializeObject<Metadata>(stringList[1].ToString());
             }
             return deltaEntry;
         }
