@@ -654,13 +654,7 @@ namespace DropNetRT
 
             _oauthHandler.Authenticate(request);
 
-            var response = await _httpClient.SendAsync(request, cancellationToken);
-
-            //TODO - Error Handling
-
-            string responseBody = await response.Content.ReadAsStringAsync();
-
-            var deltaResponse = JsonConvert.DeserializeObject<DeltaPageInternal>(responseBody);
+            var deltaResponse = await SendAsync<DeltaPageInternal>(request, cancellationToken);
 
             var deltaPage = new DeltaPage
             {
@@ -714,13 +708,7 @@ namespace DropNetRT
 
             _oauthHandler.Authenticate(request);
 
-            var response = await _httpClient.SendAsync(request, cancellationToken);
-
-            //TODO - Error Handling
-
-            string responseBody = await response.Content.ReadAsStringAsync();
-
-            return JsonConvert.DeserializeObject<LongpollDeltaResult>(responseBody);
+            return await SendAsync<LongpollDeltaResult>(request, cancellationToken);
         }
     }
 }
