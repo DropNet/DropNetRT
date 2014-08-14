@@ -652,8 +652,6 @@ namespace DropNetRT
 
             request.AddParameter("cursor", cursor);
 
-            _oauthHandler.Authenticate(request);
-
             var deltaResponse = await SendAsync<DeltaPageInternal>(request, cancellationToken);
 
             var deltaPage = new DeltaPage
@@ -705,8 +703,6 @@ namespace DropNetRT
             if (timeout > 480)
                 timeout = 480;
             request.AddParameter("timeout", timeout);
-
-            _oauthHandler.Authenticate(request);
 
             return await SendAsync<LongpollDeltaResult>(request, cancellationToken);
         }
