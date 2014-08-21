@@ -28,6 +28,12 @@ namespace DropNetRT
         /// </summary>
         public bool UseSandbox { get; set; }
 
+        public TimeSpan Timeout
+        {
+            get { return _httpClient.Timeout; }
+            set { _httpClient.Timeout = value; }
+        }
+
         private const string SandboxRoot = "sandbox";
         private const string DropboxRoot = "dropbox";
 
