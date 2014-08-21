@@ -181,13 +181,16 @@ namespace DropNetRT
             return request;
         }
 
-        private HttpRequest MakeUploadRequest(string path, string filename)
+        private HttpRequest MakeUploadRequest(string path, string filename, string parentRevision)
         {
             var requestUrl = MakeRequestString(string.Format("1/files/{0}/{1}", Root, path.CleanPath()), ApiType.Content);
 
             var request = new HttpRequest(HttpMethod.Post, requestUrl);
 
             _oauthHandler.Authenticate(request);
+
+            if (!string.IsNullOrEmpty(parentRevision))
+                request.AddParameter("parent_rev", parentRevision);
 
             return request;
         }

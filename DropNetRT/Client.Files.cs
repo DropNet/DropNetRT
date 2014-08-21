@@ -280,7 +280,19 @@ namespace DropNetRT
         /// <returns></returns>
         public Uri UploadUrl(string path, string filename)
         {
-            var request = MakeUploadRequest(path, filename);
+            return UploadUrl(path, filename, null);
+        }
+
+        /// <summary>
+        /// Gets the upload Uri for a file (for use with Background Transfers)
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="filename"></param>
+        /// <param name="parentRevision"></param>
+        /// <returns></returns>
+        public Uri UploadUrl(string path, string filename, string parentRevision)
+        {
+            var request = MakeUploadRequest(path, filename, parentRevision);
 
             return request.RequestUri;
         }
@@ -305,9 +317,23 @@ namespace DropNetRT
         /// <param name="fileData"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<Metadata> Upload(string path, string filename, byte[] fileData, CancellationToken cancellationToken)
+        public Task<Metadata> Upload(string path, string filename, byte[] fileData, CancellationToken cancellationToken)
         {
-            var request = MakeUploadRequest(path, filename);
+            return Upload(path, filename, fileData, null, cancellationToken);
+        }
+
+        /// <summary>
+        /// Uploads a file to a Dropbox folder
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="filename"></param>
+        /// <param name="fileData"></param>
+        /// <param name="parentRevision"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task<Metadata> Upload(string path, string filename, byte[] fileData, string parentRevision, CancellationToken cancellationToken)
+        {
+            var request = MakeUploadRequest(path, filename, parentRevision);
 
             var content = new MultipartFormDataContent(_formBoundary);
 
