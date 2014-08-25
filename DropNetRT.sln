@@ -7,15 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DropNetRT", "DropNetRT\Drop
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DropNetRT.Tests", "DropNetRT.Tests\DropNetRT.Tests.csproj", "{4892A78D-0053-4C4F-A683-F1ED48DDA4A7}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{7038D114-F551-4DF3-9DC7-4C0581F98E71}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DropNetRT.Sample.WP8.1", "DropNetWPTest\DropNetRT.Sample.WP8.1.csproj", "{AB756513-EE5D-40E0-9376-26CE6F6A9F1A}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,24 +33,6 @@ Global
 		{4892A78D-0053-4C4F-A683-F1ED48DDA4A7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4892A78D-0053-4C4F-A683-F1ED48DDA4A7}.Release|ARM.ActiveCfg = Release|Any CPU
 		{4892A78D-0053-4C4F-A683-F1ED48DDA4A7}.Release|x86.ActiveCfg = Release|Any CPU
-		{AB756513-EE5D-40E0-9376-26CE6F6A9F1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AB756513-EE5D-40E0-9376-26CE6F6A9F1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AB756513-EE5D-40E0-9376-26CE6F6A9F1A}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{AB756513-EE5D-40E0-9376-26CE6F6A9F1A}.Debug|ARM.ActiveCfg = Debug|ARM
-		{AB756513-EE5D-40E0-9376-26CE6F6A9F1A}.Debug|ARM.Build.0 = Debug|ARM
-		{AB756513-EE5D-40E0-9376-26CE6F6A9F1A}.Debug|ARM.Deploy.0 = Debug|ARM
-		{AB756513-EE5D-40E0-9376-26CE6F6A9F1A}.Debug|x86.ActiveCfg = Debug|x86
-		{AB756513-EE5D-40E0-9376-26CE6F6A9F1A}.Debug|x86.Build.0 = Debug|x86
-		{AB756513-EE5D-40E0-9376-26CE6F6A9F1A}.Debug|x86.Deploy.0 = Debug|x86
-		{AB756513-EE5D-40E0-9376-26CE6F6A9F1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AB756513-EE5D-40E0-9376-26CE6F6A9F1A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AB756513-EE5D-40E0-9376-26CE6F6A9F1A}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{AB756513-EE5D-40E0-9376-26CE6F6A9F1A}.Release|ARM.ActiveCfg = Release|ARM
-		{AB756513-EE5D-40E0-9376-26CE6F6A9F1A}.Release|ARM.Build.0 = Release|ARM
-		{AB756513-EE5D-40E0-9376-26CE6F6A9F1A}.Release|ARM.Deploy.0 = Release|ARM
-		{AB756513-EE5D-40E0-9376-26CE6F6A9F1A}.Release|x86.ActiveCfg = Release|x86
-		{AB756513-EE5D-40E0-9376-26CE6F6A9F1A}.Release|x86.Build.0 = Release|x86
-		{AB756513-EE5D-40E0-9376-26CE6F6A9F1A}.Release|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
