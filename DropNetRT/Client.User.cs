@@ -1,4 +1,5 @@
-﻿using DropNetRT.HttpHelpers;
+﻿using System.Threading;
+using DropNetRT.HttpHelpers;
 using DropNetRT.Models;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -54,34 +55,50 @@ namespace DropNetRT
             return UserLogin;
         }
 
+        /// <summary>
+        /// Gets the account info of the current logged in user
+        /// </summary>
+        /// <returns></returns>
+        public Task<AccountInfo> AccountInfo()
+        {
+            return AccountInfo(CancellationToken.None);
+        }
 
         /// <summary>
         /// Gets the account info of the current logged in user
         /// </summary>
         /// <returns></returns>
-        public async Task<AccountInfo> AccountInfo()
+        public async Task<AccountInfo> AccountInfo(CancellationToken cancellationToken)
         {
             var requestUrl = MakeRequestString("1/account/info", ApiType.Base);
 
             var request = new HttpRequest(HttpMethod.Get, requestUrl);
 
-            var response = await SendAsync<AccountInfo>(request);
+            var response = await SendAsync<AccountInfo>(request, cancellationToken);
 
             return response;
         }
-
 
         /// <summary>
         /// Gets the oauth2 token for current logged in user
         /// </summary>
         /// <returns></returns>
-        public async Task<string> GetOAuth2Token()
+        public Task<string> GetOAuth2Token()
+        {
+            return GetOAuth2Token(CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Gets the oauth2 token for current logged in user
+        /// </summary>
+        /// <returns></returns>
+        public async Task<string> GetOAuth2Token(CancellationToken cancellationToken)
         {
             var requestUrl = MakeRequestString("1/oauth2/token_from_oauth1", ApiType.Base);
 
             var request = new HttpRequest (HttpMethod.Post, requestUrl);
 
-            var response = await SendAsync<OAuth2TokenResponse>(request);
+            var response = await SendAsync<OAuth2TokenResponse>(request, cancellationToken);
 
             return response.Token;
         }

@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using Newtonsoft.Json.Linq;
 
 namespace DropNetRT
 {
@@ -75,7 +76,22 @@ namespace DropNetRT
         private string MakeRequestString(string action, ApiType apiType)
         {
             //TODO - check for /
-            return string.Format("{0}/{1}", apiType == ApiType.Base ? ApiBaseUrl : ApiContentBaseUrl, action);
+            return string.Format("{0}/{1}", GetBaseUrl(apiType), action);
+        }
+
+        private static string GetBaseUrl(ApiType apiType)
+        {
+            switch (apiType)
+            {
+                case ApiType.Base:
+                    return ApiBaseUrl;
+                case ApiType.Content:
+                    return ApiContentBaseUrl;
+                case ApiType.Notify:
+                    return ApiNotifyBaseUrl;
+                default:
+                    throw new ArgumentOutOfRangeException("apiType");
+            }
         }
 
 
@@ -124,19 +140,19 @@ namespace DropNetRT
         }
 
         /// <summary>
-        /// Builds a DeltaEntry object from a list of string responses
+        /// Builds a DeltaEntry object from a list of JRaw responses
         /// </summary>
         /// <param name="stringList"></param>
         /// <returns></returns>
-        private DeltaEntry StringListToDeltaEntry(List<string> stringList)
+        private DeltaEntry JRawListToDeltaEntry(List<JRaw> stringList)
         {
             var deltaEntry = new DeltaEntry
             {
-                Path = stringList[0]
+                Path = JToken.Parse(stringList[0].ToString()).Value<string>()
             };
-            if (!String.IsNullOrEmpty(stringList[1]))
+            if (!String.IsNullOrEmpty(stringList[1].ToString()))
             {
-                deltaEntry.MetaData = JsonConvert.DeserializeObject<Metadata>(stringList[1]);
+                deltaEntry.MetaData = JsonConvert.DeserializeObject<Metadata>(stringList[1].ToString());
             }
             return deltaEntry;
         }
@@ -165,13 +181,16 @@ namespace DropNetRT
             return request;
         }
 
-        private HttpRequest MakeUploadRequest(string path, string filename)
+        private HttpRequest MakeUploadRequest(string path, string filename, string parentRevision)
         {
             var requestUrl = MakeRequestString(string.Format("1/files/{0}/{1}", Root, path.CleanPath()), ApiType.Content);
 
             var request = new HttpRequest(HttpMethod.Post, requestUrl);
 
             _oauthHandler.Authenticate(request);
+
+            if (!string.IsNullOrEmpty(parentRevision))
+                request.AddParameter("parent_rev", parentRevision);
 
             return request;
         }
