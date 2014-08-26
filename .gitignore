@@ -111,3 +111,4 @@ UpgradeLog*.XML
 .DS_Store
 
 /packages
+/DropNetRT.Sample.WP8/packages
