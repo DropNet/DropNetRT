@@ -95,6 +95,7 @@
     <Compile Include="Models\DeltaPage.cs" />
     <Compile Include="Models\DeltaPageInternal.cs" />
     <Compile Include="Models\Metadata.cs" />
+    <Compile Include="Models\Modifier.cs" />
     <Compile Include="Models\OAuth2TokenResponse.cs" />
     <Compile Include="Models\SharesResponse.cs" />
     <Compile Include="Models\ThumbnailSize.cs" />

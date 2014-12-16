@@ -49,6 +49,9 @@ namespace DropNetRT.Models
         [DataMember(Name = "contents")]
         public List<Metadata> Contents { get; set; }
 
+        [DataMember(Name = "modifier")]
+        public Modifier Modifier { get; set; }
+
         [IgnoreDataMember]
         public DateTime ModifiedDate
         {
