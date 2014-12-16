@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>DropNetRT</id>
-    <version>1.3</version>
+    <version>1.4</version>
     <authors>Damian Karzon, Github Contributors</authors>
     <owners>Damian Karzon</owners>
     <description>Portable .NET library for the Dropbox API based on Portable HttpClient</description>
