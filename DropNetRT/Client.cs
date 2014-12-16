@@ -128,6 +128,13 @@ namespace DropNetRT
         /// <returns></returns>
         private async Task<T> SendAsync<T>(HttpRequest request, CancellationToken cancellationToken) where T : class
         {
+            string responseBody = await SendAsync(request, cancellationToken);
+
+            return JsonConvert.DeserializeObject<T>(responseBody);
+        }
+
+        private async Task<string> SendAsync(HttpRequest request, CancellationToken cancellationToken)
+        {
             //Authenticate with oauth
             _oauthHandler.Authenticate(request);
 
@@ -147,10 +154,7 @@ namespace DropNetRT
                 throw new DropboxException(response);
             }
 
-            string responseBody = await response.Content.ReadAsStringAsync();
-
-            return JsonConvert.DeserializeObject<T>(responseBody);
+            return await response.Content.ReadAsStringAsync();
         }
-
     }
 }

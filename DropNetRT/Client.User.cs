@@ -102,5 +102,18 @@ namespace DropNetRT
 
             return response.Token;
         }
+
+        /// <summary>
+        /// Disables the access token used to authenticate the call.
+        /// This method works for OAuth 1 and OAuth 2 tokens.
+        /// </summary>
+        public async Task DisableAccessToken(CancellationToken cancellationToken)
+        {
+            var requestUrl = MakeRequestString("1/disable_access_token", ApiType.Base);
+
+            var request = new HttpRequest(HttpMethod.Post, requestUrl);
+
+            await SendAsync(request, cancellationToken);
+        }
     }
 }
