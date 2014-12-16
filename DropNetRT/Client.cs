@@ -44,6 +44,8 @@ namespace DropNetRT
         private OAuthMessageHandler _oauthHandler;
         private HttpClient _httpClient;
 
+        private IWebProxy _proxy;
+
         private const string _lineBreak = "\r\n";
         private const string _formBoundary = "-----------------------------28947758029299";
 
@@ -75,13 +77,16 @@ namespace DropNetRT
         /// <param name="apiSecret">The Api Secret to use for the Dropbox Requests</param>
         /// <param name="userToken">The User authentication token</param>
         /// <param name="userSecret">The Users matching secret</param>
-        public DropNetClient(string apiKey, string apiSecret, string userToken, string userSecret)
+        /// <param name="proxy">The proxy to use for web requests</param>
+        public DropNetClient(string apiKey, string apiSecret, string userToken, string userSecret, IWebProxy proxy = null)
         {
             _apiKey = apiKey;
             _apisecret = apiSecret;
 
             UserLogin = new UserLogin { Token = userToken, Secret = userSecret };
 
+            _proxy = proxy;
+            
             LoadClient();
         }
 
@@ -93,7 +98,15 @@ namespace DropNetRT
             //Default to full access
             UseSandbox = false;
 
-            _httpHandler = new HttpClientHandler();
+            var handler = new HttpClientHandler();
+
+            if (_proxy != null)
+            {
+                handler.Proxy = _proxy;
+                handler.UseProxy = true;
+            }
+
+            _httpHandler = handler;
 
             if (UserLogin != null)
             {
@@ -128,6 +141,13 @@ namespace DropNetRT
         /// <returns></returns>
         private async Task<T> SendAsync<T>(HttpRequest request, CancellationToken cancellationToken) where T : class
         {
+            string responseBody = await SendAsync(request, cancellationToken);
+
+            return JsonConvert.DeserializeObject<T>(responseBody);
+        }
+
+        private async Task<string> SendAsync(HttpRequest request, CancellationToken cancellationToken)
+        {
             //Authenticate with oauth
             _oauthHandler.Authenticate(request);
 
@@ -147,10 +167,7 @@ namespace DropNetRT
                 throw new DropboxException(response);
             }
 
-            string responseBody = await response.Content.ReadAsStringAsync();
-
-            return JsonConvert.DeserializeObject<T>(responseBody);
+            return await response.Content.ReadAsStringAsync();
         }
-
     }
 }
