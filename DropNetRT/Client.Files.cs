@@ -71,7 +71,7 @@ namespace DropNetRT
         /// <param name="includeDeleted">Only applicable when list is set. If this parameter is set to true, then contents will include the metadata of deleted children. Note that the target of the metadata call is always returned even when it has been deleted (with is_deleted set to true) regardless of this flag.</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<Metadata> GetMetaData(string path, string hash, int? rev, bool list, bool includeDeleted, bool? includeMembership = null, CancellationToken cancellationToken)
+        public async Task<Metadata> GetMetaData(string path, string hash, int? rev, bool list, bool includeDeleted, bool? includeMembership, CancellationToken cancellationToken)
         {
             var requestUrl = MakeRequestString(string.Format("1/metadata/{0}/{1}", Root, path.CleanPath()), ApiType.Base);
 
