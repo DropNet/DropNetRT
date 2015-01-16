@@ -440,6 +440,7 @@ namespace DropNetRT
 
             var buffer = new byte[ChunkSize];
 
+            stream.Seek(lastResponse.Offset, SeekOrigin.Begin);
             var contentSize = stream.Read(buffer, 0, ChunkSize);
 
             if(contentSize == 0)
@@ -461,6 +462,10 @@ namespace DropNetRT
 
                 var body = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<ChunkedUploadResponse>(body);
+            }
+            catch (AggregateException)
+            {
+                throw;
             }
             catch (DropboxException)
             {
@@ -494,6 +499,10 @@ namespace DropNetRT
                 var body = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<ChunkedUploadResponse>(body);
             }
+            catch (AggregateException)
+            {
+                throw;
+            }
             catch(DropboxException)
             {
                 throw;
@@ -506,8 +515,6 @@ namespace DropNetRT
 
         public async Task<Metadata> UploadChunked(string path, string filename, Stream stream, CancellationToken cancellationToken, IProgress<long> progress = null)
         {
-            HttpResponseMessage response;
-
             try
             {
                 // Upload the initial chunk so we can get the upload_id value
@@ -530,35 +537,38 @@ namespace DropNetRT
                 {
                     chunkedUploadResponse = await UploadChunk(stream, chunkedUploadResponse, cancellationToken);
 
-                    if (progress != null && chunkedUploadResponse != null)
+                    if(progress != null && chunkedUploadResponse != null)
                     {
                         progress.Report(chunkedUploadResponse.Offset);
                     }
-                } 
+                }
 
                 // Commit the upload
                 var commitRequest = MakeChunkedUploadCommitRequest(path, filename, uploadId);
 
-                response = await _httpClient.PostAsync(commitRequest.RequestUri, null, cancellationToken);
+                var response = await _httpClient.PostAsync(commitRequest.RequestUri, null, cancellationToken);
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    throw new DropboxException(response);
+                }
+
+                var responseBody = await response.Content.ReadAsStringAsync();
+
+                return JsonConvert.DeserializeObject<Metadata>(responseBody);
             }
-            catch (DropboxException)
+            catch(AggregateException)
             {
                 throw;
             }
-            catch (Exception ex)
+            catch(DropboxException)
+            {
+                throw;
+            }
+            catch(Exception ex)
             {
                 throw new DropboxException(ex);
             }
-
-            //TODO - More Error Handling
-            if (response.StatusCode != HttpStatusCode.OK)
-            {
-                throw new DropboxException(response);
-            }
-
-            var responseBody = await response.Content.ReadAsStringAsync();
-
-            return JsonConvert.DeserializeObject<Metadata>(responseBody);
         }
 
         /// <summary>
