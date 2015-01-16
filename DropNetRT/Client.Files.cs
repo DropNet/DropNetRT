@@ -424,6 +424,143 @@ namespace DropNetRT
             return JsonConvert.DeserializeObject<Metadata>(responseBody);
         }
 
+        private const int ChunkSize = 1024 * 1024;
+
+        private async Task<ChunkedUploadResponse> UploadChunk(Stream stream, ChunkedUploadResponse lastResponse, CancellationToken cancellationToken)
+        {
+            if(lastResponse == null)
+            {
+                throw new ArgumentNullException("lastResponse");
+            }
+
+            var offset = lastResponse.Offset;
+            var uploadId = lastResponse.UploadId;
+
+            var request = MakeChunkedUploadPutRequest(offset, uploadId);
+
+            var buffer = new byte[ChunkSize];
+
+            var contentSize = stream.Read(buffer, 0, ChunkSize);
+
+            if(contentSize == 0)
+            {
+                // Nothing left to send
+                return null;
+            }
+
+            HttpContent content = new ByteArrayContent(buffer, 0, contentSize);
+
+            try
+            {
+                var response = await _httpClient.PutAsync(request.RequestUri, content, cancellationToken);
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    throw new DropboxException(response);
+                }
+
+                var body = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<ChunkedUploadResponse>(body);
+            }
+            catch (DropboxException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new DropboxException(ex);
+            }
+        }
+
+        private async Task<ChunkedUploadResponse> StartChunkedUpload(Stream stream, CancellationToken cancellationToken)
+        {
+            var request = MakeChunkedUploadPutRequest(0);
+
+            var buffer = new byte[ChunkSize];
+
+            var contentSize = stream.Read(buffer, 0, ChunkSize);
+
+            HttpContent content = new ByteArrayContent(buffer, 0, contentSize);
+
+            try
+            {
+                var response = await _httpClient.PutAsync(request.RequestUri, content, cancellationToken);
+
+                if(response.StatusCode != HttpStatusCode.OK)
+                {
+                    throw new DropboxException(response);
+                }
+
+                var body = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<ChunkedUploadResponse>(body);
+            }
+            catch(DropboxException)
+            {
+                throw;
+            }
+            catch(Exception ex)
+            {
+                throw new DropboxException(ex);
+            }
+        }
+
+        public async Task<Metadata> UploadChunked(string path, string filename, Stream stream, CancellationToken cancellationToken, IProgress<long> progress = null)
+        {
+            HttpResponseMessage response;
+
+            try
+            {
+                // Upload the initial chunk so we can get the upload_id value
+                var chunkedUploadResponse = await StartChunkedUpload(stream, cancellationToken);
+
+                if(chunkedUploadResponse == null)
+                {
+                    throw new Exception("Initial chunk upload response was null.");
+                }
+
+                var uploadId = chunkedUploadResponse.UploadId;
+
+                if(progress != null)
+                {
+                    progress.Report(chunkedUploadResponse.Offset);
+                }
+
+                // Keep uploading subsequent chunks until we don't have anything left to upload
+                while(chunkedUploadResponse != null)
+                {
+                    chunkedUploadResponse = await UploadChunk(stream, chunkedUploadResponse, cancellationToken);
+
+                    if (progress != null && chunkedUploadResponse != null)
+                    {
+                        progress.Report(chunkedUploadResponse.Offset);
+                    }
+                } 
+
+                // Commit the upload
+                var commitRequest = MakeChunkedUploadCommitRequest(path, filename, uploadId);
+
+                response = await _httpClient.PostAsync(commitRequest.RequestUri, null, cancellationToken);
+            }
+            catch (DropboxException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new DropboxException(ex);
+            }
+
+            //TODO - More Error Handling
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                throw new DropboxException(response);
+            }
+
+            var responseBody = await response.Content.ReadAsStringAsync();
+
+            return JsonConvert.DeserializeObject<Metadata>(responseBody);
+        }
+
         /// <summary>
         /// Deletes the file or folder from dropbox with the given path
         /// </summary>
