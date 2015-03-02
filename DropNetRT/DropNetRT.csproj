@@ -92,6 +92,7 @@
     <Compile Include="HttpHelpers\HttpParameter.cs" />
     <Compile Include="HttpHelpers\HttpRequest.cs" />
     <Compile Include="Models\AccountInfo.cs" />
+    <Compile Include="Models\ChunkedUploadResponse.cs" />
     <Compile Include="Models\DeltaPage.cs" />
     <Compile Include="Models\DeltaPageInternal.cs" />
     <Compile Include="Models\Metadata.cs" />

@@ -205,5 +205,36 @@ namespace DropNetRT
 
             return request;
         }
+
+        private HttpRequest MakeChunkedUploadPutRequest(long offset, string uploadId = null)
+        {
+            var requestUrl = MakeRequestString(string.Format("1/chunked_upload"), ApiType.Content);
+
+            var request = new HttpRequest(HttpMethod.Put, requestUrl);
+
+            if (!String.IsNullOrEmpty(uploadId))
+            {
+                request.AddParameter("upload_id", uploadId);
+            }
+
+            request.AddParameter("offset", offset);
+
+            _oauthHandler.Authenticate(request);
+
+            return request;
+        }
+
+        private HttpRequest MakeChunkedUploadCommitRequest(string path, string filename, string uploadId)
+        {
+            var requestUrl = MakeRequestString(string.Format("1/commit_chunked_upload/auto/{0}{2}{1}", path.CleanPath(), filename, path.CleanPath().Length > 0 ? "/" : ""), ApiType.Content);
+
+            var request = new HttpRequest(HttpMethod.Post, requestUrl);
+
+            request.AddParameter("upload_id", uploadId);
+
+            _oauthHandler.Authenticate(request);
+
+            return request;
+        }
     }
 }
