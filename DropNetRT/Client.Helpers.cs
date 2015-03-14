@@ -122,6 +122,11 @@ namespace DropNetRT
         {
             var userLogin = new UserLogin();
 
+            if (urlParams.StartsWith("?"))
+            {
+                urlParams = urlParams.Substring(1);
+            }
+
             var parameters = urlParams.Split('&');
 
             foreach (var parameter in parameters)
