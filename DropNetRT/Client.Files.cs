@@ -441,6 +441,11 @@ namespace DropNetRT
 
         private async Task<ChunkedUploadResponse> UploadChunk(Stream stream, ChunkedUploadResponse lastResponse, CancellationToken cancellationToken)
         {
+            return await UploadChunk(stream, ChunkSize, lastResponse, cancellationToken);
+        }
+
+        public async Task<ChunkedUploadResponse> UploadChunk(Stream stream, int chunkSize, ChunkedUploadResponse lastResponse, CancellationToken cancellationToken)
+        {
             if(lastResponse == null)
             {
                 throw new ArgumentNullException("lastResponse");
@@ -451,10 +456,10 @@ namespace DropNetRT
 
             var request = MakeChunkedUploadPutRequest(offset, uploadId);
 
-            var buffer = new byte[ChunkSize];
+            var buffer = new byte[chunkSize];
 
             stream.Seek(lastResponse.Offset, SeekOrigin.Begin);
-            var contentSize = stream.Read(buffer, 0, ChunkSize);
+            var contentSize = stream.Read(buffer, 0, chunkSize);
 
             if(contentSize == 0)
             {
@@ -492,11 +497,16 @@ namespace DropNetRT
 
         private async Task<ChunkedUploadResponse> StartChunkedUpload(Stream stream, CancellationToken cancellationToken)
         {
+            return await StartChunkedUpload(stream, ChunkSize, cancellationToken);
+        }
+
+        public async Task<ChunkedUploadResponse> StartChunkedUpload(Stream stream, int chunkSize, CancellationToken cancellationToken)
+        {
             var request = MakeChunkedUploadPutRequest(0);
 
-            var buffer = new byte[ChunkSize];
+            var buffer = new byte[chunkSize];
 
-            var contentSize = stream.Read(buffer, 0, ChunkSize);
+            var contentSize = stream.Read(buffer, 0, chunkSize);
 
             HttpContent content = new ByteArrayContent(buffer, 0, contentSize);
 
@@ -557,7 +567,27 @@ namespace DropNetRT
                 }
 
                 // Commit the upload
-                var commitRequest = MakeChunkedUploadCommitRequest(path, filename, uploadId);
+                return await CommitChunkedUpload(path, filename, null, uploadId, cancellationToken);
+            }
+            catch(AggregateException)
+            {
+                throw;
+            }
+            catch(DropboxException)
+            {
+                throw;
+            }
+            catch(Exception ex)
+            {
+                throw new DropboxException(ex);
+            }
+        }
+
+        public async Task<Metadata> CommitChunkedUpload(string path, string filename, string parentRevision, string uploadId, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var commitRequest = MakeChunkedUploadCommitRequest(path, filename, parentRevision, uploadId);
 
                 var response = await _httpClient.PostAsync(commitRequest.RequestUri, null, cancellationToken);
 
@@ -570,15 +600,15 @@ namespace DropNetRT
 
                 return JsonConvert.DeserializeObject<Metadata>(responseBody);
             }
-            catch(AggregateException)
+            catch (AggregateException)
             {
                 throw;
             }
-            catch(DropboxException)
+            catch (DropboxException)
             {
                 throw;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new DropboxException(ex);
             }
