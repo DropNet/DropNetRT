@@ -398,7 +398,20 @@ namespace DropNetRT
         /// <returns></returns>
         public async Task<Metadata> Upload(string path, string filename, Stream stream, CancellationToken cancellationToken)
         {
-            var request = MakeUploadPutRequest(path, filename);
+            return await Upload(path, filename, stream, null, cancellationToken);
+        }
+
+        /// <summary>
+        /// Uploads a streamed data to a Dropbox folder
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="filename"></param>
+        /// <param name="stream"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task<Metadata> Upload(string path, string filename, Stream stream, string parentRevision, CancellationToken cancellationToken)
+        {
+            var request = MakeUploadPutRequest(path, filename, parentRevision);
 
             var content = new StreamContent(stream);
 
@@ -869,7 +882,7 @@ namespace DropNetRT
         /// <returns></returns>
         public async Task<LongpollDeltaResult> GetLongpollDelta(string cursor, CancellationToken cancellationToken, int timeout = 30)
         {
-            var requestUrl = MakeRequestString("1/longpoll_delta", ApiType.Base);
+            var requestUrl = MakeRequestString("1/longpoll_delta", ApiType.Notify);
 
             var request = new HttpRequest(HttpMethod.Get, requestUrl);
 
