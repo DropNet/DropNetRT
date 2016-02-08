@@ -232,13 +232,16 @@ namespace DropNetRT
             return request;
         }
 
-        private HttpRequest MakeChunkedUploadCommitRequest(string path, string filename, string uploadId)
+        private HttpRequest MakeChunkedUploadCommitRequest(string path, string filename, string parentRevision, string uploadId)
         {
             var requestUrl = MakeRequestString(string.Format("1/commit_chunked_upload/auto/{0}{2}{1}", path.CleanPath(), filename, path.CleanPath().Length > 0 ? "/" : ""), ApiType.Content);
 
             var request = new HttpRequest(HttpMethod.Post, requestUrl);
 
             request.AddParameter("upload_id", uploadId);
+
+            if (!string.IsNullOrEmpty(parentRevision))
+                request.AddParameter("parent_rev", parentRevision);
 
             _oauthHandler.Authenticate(request);
 
