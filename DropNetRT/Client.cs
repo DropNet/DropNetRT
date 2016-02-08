@@ -156,6 +156,15 @@ namespace DropNetRT
             {
                 response = await _httpClient.SendAsync(request, cancellationToken);
             }
+            catch (TaskCanceledException ex)
+            {
+                // Expiration (cancellation) of the longpoll call is a normal situation, it happens regularly if longpoll set to higher values (480 is the max) and as a part of an expected workflow. Seen from this angle it is not an 'exception'.
+                // For that reason (and the possibility of a simpler consumer code) we simulate "no changes" reply from the server in this very particular case instead of throwing a generic DropBoxException.
+                if (request.RequestUri.AbsolutePath.Contains("longpoll"))
+                    return "{\"changes\" : false}";
+
+                throw new DropboxException(ex);
+            }
             catch (Exception ex)
             {
                 throw new DropboxException(ex);
